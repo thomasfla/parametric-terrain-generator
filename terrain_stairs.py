@@ -125,7 +125,10 @@ def generate_pyramid_stairs_terrain(terrain_size=8.0, step_width=0.2, step_heigh
 
     return trimesh.util.concatenate(meshes)
 
-# Usage:
-mesh = generate_pyramid_stairs_terrain()
-mesh.show()
-# mesh.export(file_obj='terrain.obj', file_type='obj')
+if __name__ == '__main__':
+    # Usage:
+    mesh = generate_pyramid_stairs_terrain()
+    scene = mesh.show()
+    # mesh.export(file_obj='terrain.obj', file_type='obj')
+    from IPython import embed
+    embed()

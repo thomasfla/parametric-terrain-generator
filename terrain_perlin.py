@@ -75,11 +75,12 @@ def generate_perlin_terrain(terrain_size_meters=8.0,resolution_per_meter=20,scal
             faces.append([idx_base, idx_base + 1, idx_base + 2])
             faces.append([idx_base + 2, idx_base + 1, idx_base + 3])
     return trimesh.Trimesh(vertices=vertices, faces=faces)
-    # Create the mesh
 
-# Usage:
-mesh = generate_perlin_terrain()
-mesh.show()
-mesh.export('terrain.obj')
+
+if __name__ == '__main__':
+    # Usage:
+    mesh = generate_perlin_terrain()
+    mesh.show()
+    mesh.export('terrain.obj')
 
 

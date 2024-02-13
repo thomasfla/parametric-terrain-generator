@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import trimesh
-def generate_heightmap(mesh, xy_range, resolution, ray_offset=0.01):
+def generate_heightmap(mesh, xy_range = ((0, 8), (0, 8)) ,resolution = 30, ray_offset=0.01):
     """
     Generate a heightmap from a mesh within a specified XY range and resolution, with improved ray casting.
 
@@ -57,13 +57,16 @@ def generate_heightmap(mesh, xy_range, resolution, ray_offset=0.01):
     return heightmap
 
 
-def plot_heightmap(heightmap, xy_range):
+import matplotlib.pyplot as plt
+
+def plot_heightmap(heightmap, xy_range=((0, 8), (0, 8)), filename=None):
     """
-    Plot the heightmap using matplotlib.
+    Plot the heightmap using matplotlib. Optionally, save the plot to a file.
 
     Parameters:
     - heightmap: 2D NumPy array, the heightmap to plot.
     - xy_range: tuple of tuples, specifying the ((min_x, max_x), (min_y, max_y)) range in meters.
+    - filename: Optional; if provided, the plot is saved to this file as a PNG. Otherwise, the plot is displayed.
     """
     (min_x, max_x), (min_y, max_y) = xy_range
 
@@ -71,7 +74,6 @@ def plot_heightmap(heightmap, xy_range):
     fig, ax = plt.subplots(figsize=(10, 8))
 
     # Plot the heightmap
-    # Note: The origin='lower' argument makes the first row in the array appear at the bottom of the plot.
     c = ax.imshow(heightmap, extent=(min_x, max_x, min_y, max_y), origin='lower', cmap='terrain')
     
     # Add a colorbar to the plot to show the height scale
@@ -82,16 +84,21 @@ def plot_heightmap(heightmap, xy_range):
     ax.set_ylabel('Y (m)')
     ax.set_title('Heightmap')
 
-    # Show the plot
-    plt.show()
+    # Save to file if filename is provided, otherwise show the plot
+    if filename:
+        plt.savefig(filename, format='png')
+        plt.close()  # Close the figure to prevent it from displaying in the notebook
+    else:
+        plt.show()
 
 
 
-#Usage: 
-xy_range = ((0, 8), (0, 8)) 
-resolution = 30  
-from terrain_stairs import *
-mesh = generate_pyramid_stairs_terrain()
-# Generate the heightmap
-heightmap = generate_heightmap(mesh, xy_range, resolution)
-plot_heightmap(heightmap, xy_range)
+if __name__ == '__main__':
+    # Usage:
+    xy_range = ((0, 8), (0, 8)) 
+    resolution = 5  
+    from terrain_stairs import *
+    mesh = generate_pyramid_stairs_terrain()
+    # Generate the heightmap
+    heightmap = generate_heightmap(mesh, xy_range, resolution)
+    plot_heightmap(heightmap, xy_range)
