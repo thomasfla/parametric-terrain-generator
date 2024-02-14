@@ -113,5 +113,12 @@ def generate_perlin_terrain(
 if __name__ == "__main__":
     # Usage:
     mesh = generate_perlin_terrain()
-    mesh.show()
-    mesh.export("terrain.obj")
+
+    # Display mesh with colormap along the Z axis
+    mesh.visual.vertex_colors = trimesh.visual.interpolate(
+        mesh.vertices[:, 2], color_map="viridis"
+    )
+    trimesh.Scene(mesh).show()
+
+    # Export mesh to .obj file
+    # mesh.export("terrain.obj")
