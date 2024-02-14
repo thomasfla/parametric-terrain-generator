@@ -153,8 +153,12 @@ def generate_pyramid_stairs_terrain(
 if __name__ == "__main__":
     # Usage:
     mesh = generate_pyramid_stairs_terrain()
-    scene = mesh.show()
-    # mesh.export(file_obj='terrain.obj', file_type='obj')
-    from IPython import embed
 
-    embed()
+    # Display mesh with colormap along the Z axis
+    mesh.visual.vertex_colors = trimesh.visual.interpolate(
+        mesh.vertices[:, 2], color_map="viridis"
+    )
+    trimesh.Scene(mesh).show()
+
+    # Export mesh as .obj file
+    # mesh.export(file_obj='terrain.obj', file_type='obj')
