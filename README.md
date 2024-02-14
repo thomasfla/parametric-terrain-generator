@@ -1,8 +1,8 @@
-# issac-terrain-generator
-Generating parametric terrains for robot policy learning using trimesh in python.
+# Parametric Terrain Generator
 
+Generating parametric terrains for robot policy learning using the Trimesh library in Python.
 
-The terrains are constrains to be at altitude 0 near the edges, and have a center flat platform to start the robots on.
+The terrains are constrained to be at altitude 0 near the edges, and have a center flat platform to start the robots on.
 
 ## examples
 <p float="middle">
