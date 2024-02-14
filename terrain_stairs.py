@@ -1,6 +1,7 @@
 import numpy as np
 import trimesh
 
+
 def create_square_plane(center, width, z_height):
     """
     Generate a square plane mesh centered at a given point.
@@ -14,14 +15,17 @@ def create_square_plane(center, width, z_height):
     - trimesh.Trimesh: Mesh object representing the square plane.
     """
     half_width = width / 2
-    corners = np.array([
-        [center[0] - half_width, center[1] - half_width, z_height],
-        [center[0] + half_width, center[1] - half_width, z_height],
-        [center[0] + half_width, center[1] + half_width, z_height],
-        [center[0] - half_width, center[1] + half_width, z_height],
-    ])
+    corners = np.array(
+        [
+            [center[0] - half_width, center[1] - half_width, z_height],
+            [center[0] + half_width, center[1] - half_width, z_height],
+            [center[0] + half_width, center[1] + half_width, z_height],
+            [center[0] - half_width, center[1] + half_width, z_height],
+        ]
+    )
     faces = np.array([[0, 1, 2], [0, 2, 3]])
     return trimesh.Trimesh(vertices=corners, faces=faces)
+
 
 def create_wall(center, size, height, step_height):
     """
@@ -39,23 +43,32 @@ def create_wall(center, size, height, step_height):
     half_size = size / 2
     base_z = height
     top_z = height + step_height
-    vertices = np.array([
-        [center[0] - half_size, center[1] - half_size, base_z],
-        [center[0] + half_size, center[1] - half_size, base_z],
-        [center[0] + half_size, center[1] + half_size, base_z],
-        [center[0] - half_size, center[1] + half_size, base_z],
-        [center[0] - half_size, center[1] - half_size, top_z],
-        [center[0] + half_size, center[1] - half_size, top_z],
-        [center[0] + half_size, center[1] + half_size, top_z],
-        [center[0] - half_size, center[1] + half_size, top_z],
-    ])
-    faces = np.array([
-        [0, 1, 5], [0, 5, 4],
-        [1, 2, 6], [1, 6, 5],
-        [2, 3, 7], [2, 7, 6],
-        [3, 0, 4], [3, 4, 7],
-    ])
+    vertices = np.array(
+        [
+            [center[0] - half_size, center[1] - half_size, base_z],
+            [center[0] + half_size, center[1] - half_size, base_z],
+            [center[0] + half_size, center[1] + half_size, base_z],
+            [center[0] - half_size, center[1] + half_size, base_z],
+            [center[0] - half_size, center[1] - half_size, top_z],
+            [center[0] + half_size, center[1] - half_size, top_z],
+            [center[0] + half_size, center[1] + half_size, top_z],
+            [center[0] - half_size, center[1] + half_size, top_z],
+        ]
+    )
+    faces = np.array(
+        [
+            [0, 1, 5],
+            [0, 5, 4],
+            [1, 2, 6],
+            [1, 6, 5],
+            [2, 3, 7],
+            [2, 7, 6],
+            [3, 0, 4],
+            [3, 4, 7],
+        ]
+    )
     return trimesh.Trimesh(vertices=vertices, faces=faces)
+
 
 def create_step_top(center, outer_size, inner_size, height):
     """
@@ -72,25 +85,36 @@ def create_step_top(center, outer_size, inner_size, height):
     """
     half_outer = outer_size / 2
     half_inner = inner_size / 2
-    vertices = np.array([
-        [center[0] - half_outer, center[1] - half_outer, height],
-        [center[0] + half_outer, center[1] - half_outer, height],
-        [center[0] + half_outer, center[1] + half_outer, height],
-        [center[0] - half_outer, center[1] + half_outer, height],
-        [center[0] - half_inner, center[1] - half_inner, height],
-        [center[0] + half_inner, center[1] - half_inner, height],
-        [center[0] + half_inner, center[1] + half_inner, height],
-        [center[0] - half_inner, center[1] + half_inner, height],
-    ])
-    faces = np.array([
-        [0, 1, 5], [0, 5, 4],
-        [1, 2, 6], [1, 6, 5],
-        [2, 3, 7], [2, 7, 6],
-        [3, 0, 4], [3, 4, 7],
-    ])
+    vertices = np.array(
+        [
+            [center[0] - half_outer, center[1] - half_outer, height],
+            [center[0] + half_outer, center[1] - half_outer, height],
+            [center[0] + half_outer, center[1] + half_outer, height],
+            [center[0] - half_outer, center[1] + half_outer, height],
+            [center[0] - half_inner, center[1] - half_inner, height],
+            [center[0] + half_inner, center[1] - half_inner, height],
+            [center[0] + half_inner, center[1] + half_inner, height],
+            [center[0] - half_inner, center[1] + half_inner, height],
+        ]
+    )
+    faces = np.array(
+        [
+            [0, 1, 5],
+            [0, 5, 4],
+            [1, 2, 6],
+            [1, 6, 5],
+            [2, 3, 7],
+            [2, 7, 6],
+            [3, 0, 4],
+            [3, 4, 7],
+        ]
+    )
     return trimesh.Trimesh(vertices=vertices, faces=faces)
 
-def generate_pyramid_stairs_terrain(terrain_size=8.0, step_width=0.2, step_height=0.05, platform_size=0.5, going_up=True):
+
+def generate_pyramid_stairs_terrain(
+    terrain_size=8.0, step_width=0.2, step_height=0.05, platform_size=0.5, going_up=True
+):
     """
     Generate a mesh for a pyramid stairs terrain.
 
@@ -125,10 +149,12 @@ def generate_pyramid_stairs_terrain(terrain_size=8.0, step_width=0.2, step_heigh
 
     return trimesh.util.concatenate(meshes)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     # Usage:
     mesh = generate_pyramid_stairs_terrain()
     scene = mesh.show()
     # mesh.export(file_obj='terrain.obj', file_type='obj')
     from IPython import embed
+
     embed()
