@@ -1,5 +1,6 @@
 from terrain_perlin import generate_perlin_terrain
 from terrain_stairs import generate_pyramid_stairs_terrain
+from terrain_blocks import generate_block_terrain
 from terrain_heightmap import *
 from PIL import Image
 import trimesh
@@ -16,10 +17,14 @@ meshs = []
 meshs.append(generate_perlin_terrain())
 meshs.append(generate_pyramid_stairs_terrain(going_up=False))
 meshs.append(generate_pyramid_stairs_terrain(going_up=True))
+meshs.append(generate_step_field_terrain())
 i = 0
 for mesh in meshs:
     i += 1
-    scene = mesh.scene()
+    mesh.visual.vertex_colors = trimesh.visual.interpolate(
+        mesh.vertices[:, 2], color_map="terrain"
+    )
+    scene = trimesh.Scene(mesh)
     camera_transform = np.array(
         [
             [0.99450777, -0.00839196, 0.10432578, 5.05440546],
@@ -39,7 +44,7 @@ for mesh in meshs:
     fn = "terrain{}_3d.png".format(i)
     with open(fn, "wb") as f:
         f.write(data)
-    hm = generate_heightmap(mesh, resolution=20)
-    fn = "terrain{}_hightmap.png".format(i)
+    hm = generate_heightmap(mesh, resolution=10)
+    fn = "terrain{}_heightmap.png".format(i)
 
     plot_heightmap(hm, filename=fn)
