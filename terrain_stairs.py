@@ -113,7 +113,7 @@ def create_step_top(center, outer_size, inner_size, height):
 
 
 def generate_pyramid_stairs_terrain(
-    terrain_size=8.0, step_width=0.2, step_height=0.05, platform_size=0.5, going_up=True
+    terrain_size=8.0, step_width=0.6, step_height=0.08, platform_size=1.0, going_up=True
 ):
     """
     Generate a mesh for a pyramid stairs terrain.
