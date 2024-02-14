@@ -6,18 +6,18 @@ The terrains are constrains to be at altitude 0 near the edges, and have a cente
 
 ## examples
 <p float="left">
-  <img src="terrain1_3d.png" width="500" />
-  <img src="terrain1_heightmap.png" width="500" /> 
+  <img src="images/terrain1_3d.png" width=50% />
+  <img src="images/terrain1_heightmap.png" width=50% /> 
 </p>
 <p float="left">
-  <img src="terrain2_3d.png" width="500" />
-  <img src="terrain2_heightmap.png" width="500" /> 
+  <img src="images/terrain2_3d.png" width=50% />
+  <img src="images/terrain2_heightmap.png" width=50% /> 
 </p>
 <p float="left">
-  <img src="terrain3_3d.png" width="500" />
-  <img src="terrain3_heightmap.png" width="500" /> 
+  <img src="images/terrain3_3d.png" width=50% />
+  <img src="images/terrain3_heightmap.png" width=50% /> 
 </p>
 <p float="left">
-  <img src="terrain4_3d.png" width="500" />
-  <img src="terrain4_heightmap.png" width="500" />
+  <img src="images/terrain4_3d.png" width=50% />
+  <img src="images/terrain4_heightmap.png" width=50% />
 </p>
