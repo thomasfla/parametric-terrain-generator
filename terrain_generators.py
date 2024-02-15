@@ -16,6 +16,7 @@ def stairs_upwards(difficulty):
     """
 
     info = {}
+    info["name"] = "stairs_upwards"
     info["terrain_size"] = 8.0
     info["step_width"] = 0.6
     info["step_height"] = 0.08
@@ -46,6 +47,7 @@ def stairs_downwards(difficulty):
     """
 
     info = {}
+    info["name"] = "stairs_downwards"
     info["terrain_size"] = 8.0
     info["step_width"] = 0.6
     info["step_height"] = 0.08
@@ -63,7 +65,7 @@ def stairs_downwards(difficulty):
     return mesh, info
 
 
-def blocks(difficulty):
+def random_blocks(difficulty):
     """
     Generates a 3D terrain mesh using randomly placed blocks.
 
@@ -76,6 +78,7 @@ def blocks(difficulty):
     """
 
     info = {}
+    info["name"] = "random_blocks"
     info["terrain_size"] = 8.0
     info["min_block_size"] = 0.5
     info["max_block_size"] = 1.0
@@ -108,6 +111,7 @@ def perlin(difficulty):
     """
 
     info = {}
+    info["name"] = "perlin"
     info["terrain_size"] = 8.0
     info["resolution_per_meter"] = 20
     info["scale"] = 0.2

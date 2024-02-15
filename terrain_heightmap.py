@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import trimesh
+from tqdm import tqdm
 
 
 def generate_heightmap(mesh, xy_range=((0, 8), (0, 8)), resolution=30, ray_offset=0.01):
@@ -37,7 +38,7 @@ def generate_heightmap(mesh, xy_range=((0, 8), (0, 8)), resolution=30, ray_offse
         (0, -ray_offset),
     ]
 
-    for i in range(width):
+    for i in tqdm(range(width)):
         for j in range(height):
             highest_z = None
             for dx, dy in offsets:
