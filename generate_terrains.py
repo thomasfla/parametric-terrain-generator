@@ -1,4 +1,4 @@
-import terrain_generators as tgen
+import generators.terrain_generators as tgen
 from terrain_heightmap import generate_heightmap, plot_heightmap
 import trimesh
 import numpy as np
@@ -12,9 +12,9 @@ from datetime import datetime
 params = {}
 params["terrainSize"] = 8.0
 params["borderSize"] = 10.0
-params["numLevels"] = 3
+params["numLevels"] = 4
 params["numTerrains"] = 4
-params["resolution"] = 0.01
+params["resolution"] = 100
 
 terrainProportions = {}
 terrainProportions["stairs_upwards"] = 0.25
@@ -97,7 +97,7 @@ hm = generate_heightmap(
         (0, params["numLevels"] * params["terrainSize"]),
         (0, params["numTerrains"] * params["terrainSize"]),
     ),
-    resolution=1,
+    resolution=params["resolution"],
 )
 
 fn = "images/terrains_" + time_str + "_heightmap.png"

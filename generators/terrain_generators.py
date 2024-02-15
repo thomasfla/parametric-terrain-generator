@@ -1,6 +1,6 @@
-from terrain_perlin import generate_perlin_terrain
-from terrain_stairs import generate_pyramid_stairs_terrain
-from terrain_blocks import generate_block_terrain
+from generators.terrain_perlin import generate_perlin_terrain
+from generators.terrain_stairs import generate_pyramid_stairs_terrain
+from generators.terrain_blocks import generate_block_terrain
 
 
 def stairs_upwards(difficulty):

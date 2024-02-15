@@ -43,7 +43,9 @@ def generate_heightmap(mesh, xy_range=((0, 8), (0, 8)), resolution=30, ray_offse
     ]
 
     X, Y = np.meshgrid(range(width), range(height))
-    Z = np.ones_like(X) * -np.inf
+    heightmap = np.ones_like(X) * -np.inf
+
+    # Calculate the XY coordinates from where the rays are launched
     ray_origins = np.array(
         [
             X.ravel() / resolution,
@@ -51,9 +53,9 @@ def generate_heightmap(mesh, xy_range=((0, 8), (0, 8)), resolution=30, ray_offse
             np.ones(width * height) * z_start,
         ]
     ).transpose()
-    ray_directions = np.tile(np.array([[0, 0, -1]]), (width * height, 1))
 
-    # mesh = trimesh.Trimesh(vertices=mesh.vertices, faces=mesh.faces, use_embree=True)
+    # Cast a ray downwards from above the mesh
+    ray_directions = np.tile(np.array([[0, 0, -1]]), (width * height, 1))
 
     for dx, dy in tqdm(offsets):
         # Check for intersections
@@ -63,57 +65,13 @@ def generate_heightmap(mesh, xy_range=((0, 8), (0, 8)), resolution=30, ray_offse
             multiple_hits=False,
         )
 
-        """vals, indexes = np.unique(locations[:, :2], axis=0, return_index=True)
-        maxes = np.zeros((len(indexes), 1))
-        for i, xy in enumerate(vals):
-            maxes[i, 0] = max(locations[np.all(locations[:, :2] == xy, axis=1), 2])
-        locations = np.hstack((locations[indexes, :2], maxes))"""
-
+        # Keep maximum height over tested offsets
         fidx = (locations[:, :2] * resolution).astype(np.int64)
-
-        Z[fidx[:, 0], fidx[:, 1]] = np.maximum(
-            Z[fidx[:, 0], fidx[:, 1]], locations[:, 2]
+        heightmap[fidx[:, 0], fidx[:, 1]] = np.maximum(
+            heightmap[fidx[:, 0], fidx[:, 1]], locations[:, 2]
         )
 
-        """from matplotlib import pyplot as plt
-        plt.imshow(Z)
-        plt.show()
-
-        from IPython import embed
-        embed()"""
-
-    return Z
-
-    for i in tqdm(range(width)):
-        for j in range(height):
-            highest_z = None
-            for dx, dy in offsets:
-                # Calculate the XY coordinates with offset
-                x = min_x + (i + dx) / resolution
-                y = min_y + (j + dy) / resolution
-
-                # Cast a ray downwards from above the mesh
-                ray_origins = np.array([[x, y, z_start]])
-                ray_directions = np.array([[0, 0, -1]])  # Downwards
-
-                # Check for intersections
-                locations, index_ray, index_tri = mesh.ray.intersects_location(
-                    ray_origins=ray_origins,
-                    ray_directions=ray_directions,
-                    multiple_hits=False,
-                )
-
-                # Update the highest Z-coordinate found
-                if len(locations) > 0:
-                    max_z = locations[:, 2].max()
-                    if highest_z is None or max_z > highest_z:
-                        highest_z = max_z
-
-            # Set the heightmap value if an intersection was found
-            if highest_z is not None:
-                heightmap[j, i] = highest_z
-
-    return Z
+    return heightmap.transpose()
 
 
 import matplotlib.pyplot as plt
