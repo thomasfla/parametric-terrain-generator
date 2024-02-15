@@ -7,7 +7,7 @@ The terrains are constrained to be at altitude 0 near the edges, and have a cent
 ## Example of generated terrain
 
 <p float="middle">
-  <img src="images/last_concatenated_terrain.png" width=90% />
+  <img src="images/last_concatenated_terrains.png" width=90% />
 </p>
 
 ## Examples of subterrains
