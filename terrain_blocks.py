@@ -82,6 +82,20 @@ def create_block(center, yaw, length=1.0, width=0.3, block_height=0.08):
 
 
 def create_block_pattern(center, yaw, pattern):
+    """
+    Generate a pattern of blocks centered at a given point with a given orientation.
+    For each number in the pattern, N vertically stacked blocks are placed.
+    Stacks are placed next to each other.
+
+    Parameters:
+    - center (tuple/list of float): Center point (x, y) of the block.
+    - yaw (float): Orientation in yaw.
+    - pattern (string): Block pattern like "1", "121", "1221"
+
+    Returns:
+    - trimesh.Trimesh: Mesh object representing the pattern.
+    """
+
     # Step parameters
     length = 1.0
     width = 0.3
@@ -103,14 +117,16 @@ def create_block_pattern(center, yaw, pattern):
     mesh = trimesh.util.concatenate(meshes)
 
     # Place the mesh in the world
-    rot_matrix = trimesh.transformations.rotation_matrix(yaw, [0, 0, 1], [0, 0, 0])
-    rot_matrix[:2, -1] = center[0], center[1]
+    rot_matrix = trimesh.transformations.rotation_matrix(yaw, [0, 0, 1], [0.0, 0.0, 0])
     mesh.apply_transform(rot_matrix)
+    shift_matrix = np.eye(4)
+    shift_matrix[:2, -1] = center[0], center[1]
+    mesh.apply_transform(shift_matrix)
 
     return mesh
 
 
-def create_block(center, yaw, length, width, block_height):
+def place_block(center, yaw, length, width, block_height):
     mesh = create_block(
         [0.0, 0.0],
         0.0,
@@ -120,71 +136,76 @@ def create_block(center, yaw, length, width, block_height):
     )
 
     # Place the mesh in the world
-    rot_matrix = trimesh.transformations.rotation_matrix(yaw, [0, 0, 1], [0, 0, 0])
-    rot_matrix[:2, -1] = center[0], center[1]
+    rot_matrix = trimesh.transformations.rotation_matrix(yaw, [0, 0, 1], [0.0, 0.0, 0])
     mesh.apply_transform(rot_matrix)
+    shift_matrix = np.eye(4)
+    shift_matrix[:2, -1] = center[0], center[1]
+    mesh.apply_transform(shift_matrix)
 
     return mesh
 
 
 def generate_block_terrain(
     terrain_size=8.0,
-    block_width=0.6,
-    block_height=0.08,
-    platform_size=1.0,
-    going_up=True,
+    min_block_size=0.5,
+    max_block_size=1.0,
+    max_block_height=0.1,
+    platform_size=0.5,
+    central_platform=True,
 ):
     """
     Generate a mesh for a pyramid stairs terrain.
 
     Parameters:
     - terrain_size (float): Size of the terrain.
-    - block_width (float): Width of each block.
-    - block_height (float): Height of each block.
+    - min_block_size (float): Minimum size of each block.
+    - max_block_size (float): Maximum size of each block.
+    - max_block_height (float): Maximum height of each block.
     - platform_size (float): Size of the central platform.
-    - going_up (bool): Direction of the stairs, True for going up.
+    - central_platform (bool): True to place a central platform.
 
     Returns:
     - trimesh.Trimesh: Mesh object representing the pyramid stairs terrain.
     """
-    center = [terrain_size / 2.0, terrain_size / 2.0]
-    num_blocks = int(((terrain_size - platform_size) / 2.0) / block_width)
-    total_height = num_blocks * block_height
-    sign = 1 if going_up else -1
+
     meshes = []
 
-    # Central platform
-    meshes.append(create_square_plane(center, terrain_size, 0.0))
+    # Terrain flat square
+    meshes.append(
+        create_square_plane([terrain_size / 2.0, terrain_size / 2.0], terrain_size, 0.0)
+    )
 
-    # meshes.append(create_block([3.0, 4.0], 0.0, 1.0, 0.3, 0.08))
-    # meshes.append(create_block([5.0, 4.0], np.pi/4 , 1.0, 0.3, 0.16))
-
+    # Add blocks of various heights
     N = 100
-    xy = np.random.random((N, 2)) * 6.5 - 3.25
-    nXY = np.linalg.norm(xy, axis=1)
-    nLim = 1.2
-    xy[nXY < nLim] = xy[nXY < nLim] / nXY[nXY < nLim].reshape((-1, 1)) * nLim
-    xy += np.array([4.0, 4.0])
-    for k in range(N):
+    outer_margin = max_block_size * 0.75
+    inner_margin = max_block_size * 0.75 + platform_size * 0.5
+    k = 0
+    while k < N:
+        xy = np.random.random(2) * (terrain_size - 2 * outer_margin) + outer_margin
+        if np.all(np.abs(xy - terrain_size / 2) < inner_margin):
+            # Resample if too close from central platform
+            continue
+
         # Step parameters
         yaw = np.random.random() * 3.1415
-        length = 0.5 + np.random.random() * 0.5
-        width = 0.5 + np.random.random() * 0.5
-        block_height = np.random.random() * 0.10
+        length = np.random.random() * (max_block_size - min_block_size) + min_block_size
+        width = np.random.random() * (max_block_size - min_block_size) + min_block_size
+        block_height = np.random.random() * max_block_height
 
-        meshes.append(create_block(xy[k], yaw, length, width, block_height))
+        meshes.append(place_block(xy, yaw, length, width, block_height))
+        k += 1
 
-    meshes.append(create_block([4.0, 4.0], 0.0, 0.5, 0.5, 0.2))
-
-    """for i in range(num_blocks):
-        outer_size = platform_size + 2 * block_width * (i + 1)
-        outer_size = terrain_size if i == num_blocks - 1 else outer_size
-        inner_size = platform_size + 2 * block_width * i
-        height = sign * (block_height * (i + 1) - total_height)
-        block_mesh = create_block_top(center, outer_size, inner_size, height)
-        wall_mesh = create_wall(center, inner_size, height, -sign * block_height)
-        meshes.append(block_mesh)
-        meshes.append(wall_mesh)"""
+    # Central platform
+    if central_platform:
+        meshes.append(
+            place_block(
+                [terrain_size / 2, terrain_size / 2],
+                0.0,
+                platform_size,
+                platform_size,
+                0.5 * max_block_height,
+            )
+        )
 
     return trimesh.util.concatenate(meshes)
 
