@@ -4,7 +4,13 @@ Generating parametric terrains for robot policy learning using the Trimesh libra
 
 The terrains are constrained to be at altitude 0 near the edges, and have a center flat platform to start the robots on.
 
-## examples
+## Example of generated terrain
+
+<p float="middle">
+  <img src="images/last_concatenated_terrain.png" width=90% />
+</p>
+
+## Examples of subterrains
 <p float="middle">
   <img src="images/terrain1_3d.png" width=49% />
   <img src="images/terrain1_heightmap.png" width=49% /> 
