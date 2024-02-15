@@ -36,7 +36,53 @@ def generate_heightmap(mesh, xy_range=((0, 8), (0, 8)), resolution=30, ray_offse
         (-ray_offset, 0),
         (0, ray_offset),
         (0, -ray_offset),
+        (ray_offset, ray_offset),
+        (-ray_offset, -ray_offset),
+        (-ray_offset, ray_offset),
+        (ray_offset, -ray_offset),
     ]
+
+    X, Y = np.meshgrid(range(width), range(height))
+    Z = np.ones_like(X) * -np.inf
+    ray_origins = np.array(
+        [
+            X.ravel() / resolution,
+            Y.ravel() / resolution,
+            np.ones(width * height) * z_start,
+        ]
+    ).transpose()
+    ray_directions = np.tile(np.array([[0, 0, -1]]), (width * height, 1))
+
+    # mesh = trimesh.Trimesh(vertices=mesh.vertices, faces=mesh.faces, use_embree=True)
+
+    for dx, dy in tqdm(offsets):
+        # Check for intersections
+        locations, index_ray, index_tri = mesh.ray.intersects_location(
+            ray_origins=ray_origins + np.array([dx, dy, 0.0]) / resolution,
+            ray_directions=ray_directions,
+            multiple_hits=False,
+        )
+
+        """vals, indexes = np.unique(locations[:, :2], axis=0, return_index=True)
+        maxes = np.zeros((len(indexes), 1))
+        for i, xy in enumerate(vals):
+            maxes[i, 0] = max(locations[np.all(locations[:, :2] == xy, axis=1), 2])
+        locations = np.hstack((locations[indexes, :2], maxes))"""
+
+        fidx = (locations[:, :2] * resolution).astype(np.int64)
+
+        Z[fidx[:, 0], fidx[:, 1]] = np.maximum(
+            Z[fidx[:, 0], fidx[:, 1]], locations[:, 2]
+        )
+
+        """from matplotlib import pyplot as plt
+        plt.imshow(Z)
+        plt.show()
+
+        from IPython import embed
+        embed()"""
+
+    return Z
 
     for i in tqdm(range(width)):
         for j in range(height):
@@ -52,7 +98,9 @@ def generate_heightmap(mesh, xy_range=((0, 8), (0, 8)), resolution=30, ray_offse
 
                 # Check for intersections
                 locations, index_ray, index_tri = mesh.ray.intersects_location(
-                    ray_origins=ray_origins, ray_directions=ray_directions
+                    ray_origins=ray_origins,
+                    ray_directions=ray_directions,
+                    multiple_hits=False,
                 )
 
                 # Update the highest Z-coordinate found
@@ -65,7 +113,7 @@ def generate_heightmap(mesh, xy_range=((0, 8), (0, 8)), resolution=30, ray_offse
             if highest_z is not None:
                 heightmap[j, i] = highest_z
 
-    return heightmap
+    return Z
 
 
 import matplotlib.pyplot as plt
