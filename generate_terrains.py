@@ -1,29 +1,26 @@
 from terrain_perlin import generate_perlin_terrain
 from terrain_stairs import generate_pyramid_stairs_terrain
 from terrain_blocks import generate_block_terrain
-from terrain_heightmap import *
-from PIL import Image
+from terrain_heightmap import generate_heightmap, plot_heightmap
 import trimesh
-from IPython import embed
 import numpy as np
+from tqdm import tqdm
 
-mesh = generate_pyramid_stairs_terrain()
-
-# Create a scene from the mesh if not already done
-
-# embed()
-
+print("-- Generating meshes --")
 meshs = []
 meshs.append(generate_perlin_terrain())
 meshs.append(generate_pyramid_stairs_terrain(going_up=False))
 meshs.append(generate_pyramid_stairs_terrain(going_up=True))
-meshs.append(generate_step_field_terrain())
-i = 0
-for mesh in meshs:
-    i += 1
+meshs.append(generate_block_terrain())
+
+print("-- Generating images and heightmaps --")
+for i, mesh in enumerate(tqdm(meshs)):
+    # Add colormap to mesh along z coordinate
     mesh.visual.vertex_colors = trimesh.visual.interpolate(
         mesh.vertices[:, 2], color_map="terrain"
     )
+
+    # Create a scene from the mesh
     scene = trimesh.Scene(mesh)
     camera_transform = np.array(
         [
@@ -41,10 +38,10 @@ for mesh in meshs:
     data = scene.save_image(resolution=[1920, 1080], visible=False)
 
     # Convert the image data to an actual image and save it
-    fn = "terrain{}_3d.png".format(i)
+    fn = "terrain{}_3d.png".format(i + 1)
     with open(fn, "wb") as f:
         f.write(data)
     hm = generate_heightmap(mesh, resolution=10)
-    fn = "terrain{}_heightmap.png".format(i)
+    fn = "terrain{}_heightmap.png".format(i + 1)
 
     plot_heightmap(hm, filename=fn)
