@@ -1,6 +1,3 @@
-from terrain_perlin import generate_perlin_terrain
-from terrain_stairs import generate_pyramid_stairs_terrain
-from terrain_blocks import generate_block_terrain
 from terrain_heightmap import generate_heightmap, plot_heightmap
 import trimesh
 import numpy as np
