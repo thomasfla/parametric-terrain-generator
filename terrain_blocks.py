@@ -45,14 +45,14 @@ def create_block(center, yaw, length=1.0, width=0.3, block_height=0.08):
     half_width = width / 2
     corners = np.array(
         [
-            [center[0] - half_length, center[1] - half_width, block_height],
-            [center[0] + half_length, center[1] - half_width, block_height],
-            [center[0] + half_length, center[1] + half_width, block_height],
-            [center[0] - half_length, center[1] + half_width, block_height],
-            [center[0] - half_length, center[1] - half_width, 0.0],
-            [center[0] + half_length, center[1] - half_width, 0.0],
-            [center[0] + half_length, center[1] + half_width, 0.0],
-            [center[0] - half_length, center[1] + half_width, 0.0],
+            [-half_length, -half_width, block_height],
+            [+half_length, -half_width, block_height],
+            [+half_length, +half_width, block_height],
+            [-half_length, +half_width, block_height],
+            [-half_length, -half_width, 0.0],
+            [+half_length, -half_width, 0.0],
+            [+half_length, +half_width, 0.0],
+            [-half_length, +half_width, 0.0],
         ]
     )
     faces = np.array(
@@ -71,12 +71,12 @@ def create_block(center, yaw, length=1.0, width=0.3, block_height=0.08):
     )
     mesh = trimesh.Trimesh(vertices=corners, faces=faces)
 
-    # Rotate the mesh along the Z axis
-    if yaw != 0.0:
-        direction = [0, 0, 1]
-        center += [0.0]
-        rot_matrix = trimesh.transformations.rotation_matrix(yaw, direction, center)
-        mesh.apply_transform(rot_matrix)
+    # Place the mesh in the world
+    rot_matrix = trimesh.transformations.rotation_matrix(yaw, [0, 0, 1], [0.0, 0.0, 0])
+    mesh.apply_transform(rot_matrix)
+    shift_matrix = np.eye(4)
+    shift_matrix[:2, -1] = center[0], center[1]
+    mesh.apply_transform(shift_matrix)
 
     return mesh
 
@@ -115,25 +115,6 @@ def create_block_pattern(center, yaw, pattern):
             )
         )
     mesh = trimesh.util.concatenate(meshes)
-
-    # Place the mesh in the world
-    rot_matrix = trimesh.transformations.rotation_matrix(yaw, [0, 0, 1], [0.0, 0.0, 0])
-    mesh.apply_transform(rot_matrix)
-    shift_matrix = np.eye(4)
-    shift_matrix[:2, -1] = center[0], center[1]
-    mesh.apply_transform(shift_matrix)
-
-    return mesh
-
-
-def place_block(center, yaw, length, width, block_height):
-    mesh = create_block(
-        [0.0, 0.0],
-        0.0,
-        length,
-        width,
-        block_height,
-    )
 
     # Place the mesh in the world
     rot_matrix = trimesh.transformations.rotation_matrix(yaw, [0, 0, 1], [0.0, 0.0, 0])
@@ -192,13 +173,13 @@ def generate_block_terrain(
         width = np.random.random() * (max_block_size - min_block_size) + min_block_size
         block_height = np.random.random() * max_block_height
 
-        meshes.append(place_block(xy, yaw, length, width, block_height))
+        meshes.append(create_block(xy, yaw, length, width, block_height))
         k += 1
 
     # Central platform
     if central_platform:
         meshes.append(
-            place_block(
+            create_block(
                 [terrain_size / 2, terrain_size / 2],
                 0.0,
                 platform_size,
