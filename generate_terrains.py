@@ -38,10 +38,10 @@ for i, mesh in enumerate(tqdm(meshs)):
     data = scene.save_image(resolution=[1920, 1080], visible=False)
 
     # Convert the image data to an actual image and save it
-    fn = "terrain{}_3d.png".format(i + 1)
+    fn = "images/terrain{}_3d.png".format(i + 1)
     with open(fn, "wb") as f:
         f.write(data)
     hm = generate_heightmap(mesh, resolution=10)
-    fn = "terrain{}_heightmap.png".format(i + 1)
+    fn = "images/terrain{}_heightmap.png".format(i + 1)
 
     plot_heightmap(hm, filename=fn)
