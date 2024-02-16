@@ -82,16 +82,16 @@ def slope_upwards(difficulty):
     info["name"] = "slope_upwards"
     info["terrain_size"] = 8.0
     info["total_height"] = 0.5
-    info["bar_width"] = 0.2
     info["bar_height"] = 0.2
+    info["bar_width"] = 0.2
     info["platform_size"] = 1.0
     info["going_up"] = True
 
     mesh = generate_slope_terrain(
         info["terrain_size"],
         info["total_height"] * difficulty,
-        info["bar_width"],
         info["bar_height"] * difficulty,
+        info["bar_width"],
         info["platform_size"],
         info["going_up"],
     )

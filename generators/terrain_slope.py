@@ -189,8 +189,8 @@ def generate_barred_slope_side(
     - yaw (float): Orientation in yaw.
     - outer_size (float): Size of the outer square.
     - inner_size (float): Size of the inner square (hole).
-    - bar_height (float): Width of the transversal bars on the slope.
-    - bar_width (float): Height of the transversal bars on the slope.
+    - bar_height (float): Height of the transversal bars on the slope.
+    - bar_width (float): Width of the transversal bars on the slope.
 
     Returns:
     - trimesh.Trimesh: Mesh object representing the slope.
