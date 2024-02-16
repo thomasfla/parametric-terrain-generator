@@ -126,7 +126,7 @@ def slope_upwards(difficulty):
     info["name"] = "slope_upwards"
     info["terrain_size"] = 8.0
     info["total_height"] = 0.5
-    info["bar_height"] = 0.2
+    info["bar_height"] = 0.08
     info["bar_width"] = 0.2
     info["platform_size"] = 1.0
     info["going_up"] = True
@@ -161,7 +161,7 @@ def random_blocks(difficulty):
     info["min_block_size"] = 0.5
     info["max_block_size"] = 1.0
     info["max_block_height"] = 0.1
-    info["platform_size"] = 0.5
+    info["platform_size"] = 0.75
     info["central_platform"] = True
 
     mesh = generate_block_terrain(
@@ -194,7 +194,7 @@ def perlin(difficulty):
     info["resolution_per_meter"] = 20
     info["scale"] = 0.2
     info["height_multiplier"] = 0.3
-    info["platform_size"] = 0.5
+    info["platform_size"] = 0.75
     info["platform_smoothing_distance"] = 0.4
     info["edge_smoothing_distance"] = 0.4
 

@@ -20,6 +20,8 @@ def generate_heightmap(mesh, xy_range=((0, 8), (0, 8)), resolution=30, ray_offse
     (min_x, max_x), (min_y, max_y) = xy_range
     width = int((max_x - min_x) * resolution)
     height = int((max_y - min_y) * resolution)
+    iX = int(min_x * resolution)
+    iY = int(min_y * resolution)
 
     # Calculate the Z start point (above the highest point of the mesh)
     z_start = (
@@ -40,7 +42,7 @@ def generate_heightmap(mesh, xy_range=((0, 8), (0, 8)), resolution=30, ray_offse
     ]
 
     # Initialize the heightmap arrays
-    X, Y = np.meshgrid(range(width), range(height))
+    X, Y = np.meshgrid(range(iX, iX + width), range(iY, iY + height))
     heightmap = np.ones_like(X.transpose()) * -np.inf
     heightmap[[0, -1], :] = 0.0
     heightmap[:, [0, -1]] = 0.0
@@ -66,7 +68,7 @@ def generate_heightmap(mesh, xy_range=((0, 8), (0, 8)), resolution=30, ray_offse
         )
 
         # Keep maximum height over tested offsets
-        fidx = (locations[:, :2] * resolution).astype(np.int64)
+        fidx = (locations[:, :2] * resolution).astype(np.int64) - np.array([iX, iY])
         heightmap[fidx[:, 0], fidx[:, 1]] = np.maximum(
             heightmap[fidx[:, 0], fidx[:, 1]], locations[:, 2]
         )

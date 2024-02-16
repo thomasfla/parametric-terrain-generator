@@ -106,8 +106,14 @@ print("-- Heightmap generation --")
 hm = generate_heightmap(
     world_mesh,
     xy_range=(
-        (0, params["numLevels"] * params["terrainSize"]),
-        (0, params["numTerrains"] * params["terrainSize"]),
+        (
+            -params["borderSize"],
+            params["numLevels"] * params["terrainSize"] + params["borderSize"],
+        ),
+        (
+            -params["borderSize"],
+            params["numTerrains"] * params["terrainSize"] + params["borderSize"],
+        ),
     ),
     resolution=params["resolution"],
 )
@@ -116,8 +122,14 @@ fn = "images/terrains_" + time_str + "_heightmap.png"
 plot_heightmap(
     hm,
     xy_range=(
-        (0.0, params["terrainSize"] * params["numLevels"]),
-        (0.0, params["terrainSize"] * params["numTerrains"]),
+        (
+            -params["borderSize"],
+            params["terrainSize"] * params["numLevels"] + params["borderSize"],
+        ),
+        (
+            -params["borderSize"],
+            params["terrainSize"] * params["numTerrains"] + params["borderSize"],
+        ),
     ),
     filename=fn,
 )
