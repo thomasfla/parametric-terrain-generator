@@ -215,9 +215,8 @@ def generate_barred_slope_side(
     slope_mesh = trimesh.Trimesh(vertices=vertices, faces=faces)
 
     # Create transversal bars on the smooth slope
-    mesh = trimesh.util.concatenate(
-        [slope_mesh]
-        + [
+    bars_mesh = trimesh.util.concatenate(
+        [
             create_bar(center, a, outer_size, inner_size, bar_height, bar_width)
             for a in [0.25, 0.5, 0.75]
         ]
@@ -226,13 +225,18 @@ def generate_barred_slope_side(
     rot_matrix = trimesh.transformations.rotation_matrix(
         rot, [0, 1, 0], [center[0] + half_inner, center[1], 0]
     )
-    mesh.apply_transform(rot_matrix)
+    slope_mesh.apply_transform(rot_matrix)
+    bars_mesh.apply_transform(rot_matrix)
     shift_matrix = np.eye(4)
     shift_matrix[2, -1] = height
-    mesh.apply_transform(shift_matrix)
+    slope_mesh.apply_transform(shift_matrix)
+    bars_mesh.apply_transform(shift_matrix)
+
+    # Merge slope and bars
+    mesh = trimesh.util.concatenate([slope_mesh, bars_mesh])
 
     # Correction along X
-    maxx = np.max(mesh.vertices[:, 0] - center[0] - half_inner)
+    maxx = np.max(slope_mesh.vertices[:, 0] - center[0] - half_inner)
     coeff = (half_outer - half_inner) / maxx
     mesh.vertices[:, 0] = (
         coeff * (mesh.vertices[:, 0] - center[0] - half_inner) + center[0] + half_inner
@@ -240,9 +244,9 @@ def generate_barred_slope_side(
 
     # Correction along Z
     if height < 0:
-        minmaxz = np.max(mesh.vertices[:, 2] - height)
+        minmaxz = np.max(slope_mesh.vertices[:, 2] - height)
     else:
-        minmaxz = np.min(mesh.vertices[:, 2] - height)
+        minmaxz = np.min(slope_mesh.vertices[:, 2] - height)
     coeff = -height / minmaxz
     mesh.vertices[:, 2] = coeff * (mesh.vertices[:, 2] - height) + height
 
@@ -280,6 +284,10 @@ def generate_slope_terrain(
     center = [terrain_size / 2.0, terrain_size / 2.0]
     sign = 1 if going_up else -1
     meshes = []
+
+    # Flat terrain
+    if total_height == 0.0:
+        return create_square_plane(center, terrain_size, 0.0)
 
     # Central platform
     meshes.append(create_square_plane(center, platform_size, -sign * total_height))

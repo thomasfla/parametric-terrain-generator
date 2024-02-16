@@ -21,9 +21,6 @@ def generate_heightmap(mesh, xy_range=((0, 8), (0, 8)), resolution=30, ray_offse
     width = int((max_x - min_x) * resolution)
     height = int((max_y - min_y) * resolution)
 
-    # Initialize the heightmap array
-    heightmap = np.full((height, width), np.nan)
-
     # Calculate the Z start point (above the highest point of the mesh)
     z_start = (
         mesh.bounds[:, 2].max() + 10
@@ -42,20 +39,23 @@ def generate_heightmap(mesh, xy_range=((0, 8), (0, 8)), resolution=30, ray_offse
         (ray_offset, -ray_offset),
     ]
 
+    # Initialize the heightmap arrays
     X, Y = np.meshgrid(range(width), range(height))
-    heightmap = np.ones_like(X) * -np.inf
+    heightmap = np.ones_like(X.transpose()) * -np.inf
+    heightmap[[0, -1], :] = 0.0
+    heightmap[:, [0, -1]] = 0.0
 
     # Calculate the XY coordinates from where the rays are launched
     ray_origins = np.array(
         [
-            X.ravel() / resolution,
-            Y.ravel() / resolution,
-            np.ones(width * height) * z_start,
+            X[1:-1, 1:-1].ravel() / resolution,
+            Y[1:-1, 1:-1].ravel() / resolution,
+            np.ones((width - 2) * (height - 2)) * z_start,
         ]
     ).transpose()
 
     # Cast a ray downwards from above the mesh
-    ray_directions = np.tile(np.array([[0, 0, -1]]), (width * height, 1))
+    ray_directions = np.tile(np.array([[0, 0, -1]]), ((width - 2) * (height - 2), 1))
 
     for dx, dy in tqdm(offsets):
         # Check for intersections

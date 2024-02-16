@@ -1,6 +1,7 @@
 from generators.terrain_perlin import generate_perlin_terrain
 from generators.terrain_stairs import generate_pyramid_stairs_terrain
 from generators.terrain_blocks import generate_block_terrain
+from generators.terrain_slope import generate_slope_terrain
 
 
 def stairs_upwards(difficulty):
@@ -58,6 +59,39 @@ def stairs_downwards(difficulty):
         info["terrain_size"],
         info["step_width"],
         info["step_height"] * difficulty,
+        info["platform_size"],
+        info["going_up"],
+    )
+
+    return mesh, info
+
+
+def slope_upwards(difficulty):
+    """
+    Generates a 3D terrain mesh with a slope going upwards.
+
+    Parameters:
+    - difficulty (float): Difficulty scaling between 0 (easiest) and 1 (hardest).
+
+    Returns:
+    - A trimesh.Trimesh object representing the generated terrain mesh.
+    - A dict containing the parameters of the terrain generator.
+    """
+
+    info = {}
+    info["name"] = "slope_upwards"
+    info["terrain_size"] = 8.0
+    info["total_height"] = 0.5
+    info["bar_width"] = 0.2
+    info["bar_height"] = 0.2
+    info["platform_size"] = 1.0
+    info["going_up"] = True
+
+    mesh = generate_slope_terrain(
+        info["terrain_size"],
+        info["total_height"] * difficulty,
+        info["bar_width"],
+        info["bar_height"] * difficulty,
         info["platform_size"],
         info["going_up"],
     )

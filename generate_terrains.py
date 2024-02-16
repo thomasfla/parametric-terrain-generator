@@ -13,14 +13,15 @@ params = {}
 params["terrainSize"] = 8.0
 params["borderSize"] = 10.0
 params["numLevels"] = 4
-params["numTerrains"] = 4
+params["numTerrains"] = 5
 params["resolution"] = 100
 
 terrainProportions = {}
-terrainProportions["stairs_upwards"] = 0.25
-terrainProportions["stairs_downwards"] = 0.25
-terrainProportions["random_blocks"] = 0.25
-terrainProportions["perlin"] = 0.25
+terrainProportions["stairs_upwards"] = 1.0
+terrainProportions["stairs_downwards"] = 1.0
+terrainProportions["slope_upwards"] = 1.0
+terrainProportions["random_blocks"] = 1.0
+terrainProportions["perlin"] = 1.0
 params["terrainProportions"] = terrainProportions
 
 params["info"] = []
@@ -77,6 +78,8 @@ world_mesh.visual.vertex_colors = trimesh.visual.interpolate(
     world_mesh.vertices[:, 2], color_map="viridis"
 )
 scene = trimesh.Scene(world_mesh)
+# scene.show()
+
 data = scene.save_image(resolution=[1920, 1080], visible=False)
 time_str = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 fn = "images/terrains_" + time_str + ".png"
@@ -101,7 +104,14 @@ hm = generate_heightmap(
 )
 
 fn = "images/terrains_" + time_str + "_heightmap.png"
-plot_heightmap(hm, filename=fn)
+plot_heightmap(
+    hm,
+    xy_range=(
+        (0.0, params["terrainSize"] * params["numLevels"]),
+        (0.0, params["terrainSize"] * params["numTerrains"]),
+    ),
+    filename=fn,
+)
 
 ######
 # Heightmap generation
