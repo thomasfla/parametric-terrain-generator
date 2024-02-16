@@ -2,6 +2,10 @@ from terrain_heightmap import generate_heightmap, plot_heightmap
 import trimesh
 import numpy as np
 from tqdm import tqdm
+from generators.terrain_perlin import generate_perlin_terrain
+from generators.terrain_stairs import generate_pyramid_stairs_terrain
+from generators.terrain_blocks import generate_block_terrain
+from generators.terrain_slope import generate_slope_terrain
 
 print("-- Generating meshes --")
 meshs = []
@@ -9,6 +13,7 @@ meshs.append(generate_perlin_terrain())
 meshs.append(generate_pyramid_stairs_terrain(going_up=False))
 meshs.append(generate_pyramid_stairs_terrain(going_up=True))
 meshs.append(generate_block_terrain())
+meshs.append(generate_slope_terrain())
 
 print("-- Generating images and heightmaps --")
 for i, mesh in enumerate(tqdm(meshs)):
@@ -35,10 +40,10 @@ for i, mesh in enumerate(tqdm(meshs)):
     data = scene.save_image(resolution=[1920, 1080], visible=False)
 
     # Convert the image data to an actual image and save it
-    fn = "terrain{}_3d.png".format(i + 1)
+    fn = "images/terrain{}_3d.png".format(i + 1)
     with open(fn, "wb") as f:
         f.write(data)
-    hm = generate_heightmap(mesh, resolution=10)
-    fn = "terrain{}_heightmap.png".format(i + 1)
+    hm = generate_heightmap(mesh, resolution=100)
+    fn = "images/terrain{}_heightmap.png".format(i + 1)
 
     plot_heightmap(hm, filename=fn)
