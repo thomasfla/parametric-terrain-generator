@@ -75,7 +75,7 @@ world_mesh = trimesh.util.concatenate(meshes)
 
 # Display mesh with colormap along the Z axis
 world_mesh.visual.vertex_colors = trimesh.visual.interpolate(
-    world_mesh.vertices[:, 2], color_map="viridis"
+    world_mesh.vertices[:, 2], color_map="terrain"
 )
 scene = trimesh.Scene(world_mesh)
 # scene.show()
