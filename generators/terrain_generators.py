@@ -2,6 +2,50 @@ from generators.terrain_perlin import generate_perlin_terrain
 from generators.terrain_stairs import generate_pyramid_stairs_terrain
 from generators.terrain_blocks import generate_block_terrain
 from generators.terrain_slope import generate_slope_terrain
+import numpy as np
+import trimesh
+
+
+def create_border(sizeX, sizeY, borderSize):
+    """
+    Generate a flat border mesh around a generated terrain.
+
+    Parameters:
+    - sizeX (float): Size of the whole terrain along the first axis.
+    - sizeY (float): Size of the whole terrain along the second axis.
+    - borderSize (float): Size of the border area.
+
+    Returns:
+    - trimesh.Trimesh: Mesh object representing the border.
+    """
+    hX = sizeX * 0.5
+    hY = sizeY * 0.5
+    center = [hX, hY]
+    vertices = np.array(
+        [
+            [center[0] - hX - borderSize, center[1] - hY - borderSize, 0.0],
+            [center[0] + hX + borderSize, center[1] - hY - borderSize, 0.0],
+            [center[0] + hX + borderSize, center[1] + hY + borderSize, 0.0],
+            [center[0] - hX - borderSize, center[1] + hY + borderSize, 0.0],
+            [center[0] - hX, center[1] - hY, 0.0],
+            [center[0] + hX, center[1] - hY, 0.0],
+            [center[0] + hX, center[1] + hY, 0.0],
+            [center[0] - hX, center[1] + hY, 0.0],
+        ]
+    )
+    faces = np.array(
+        [
+            [0, 1, 5],
+            [0, 5, 4],
+            [1, 2, 6],
+            [1, 6, 5],
+            [2, 3, 7],
+            [2, 7, 6],
+            [3, 0, 4],
+            [3, 4, 7],
+        ]
+    )
+    return trimesh.Trimesh(vertices=vertices, faces=faces)
 
 
 def stairs_upwards(difficulty):

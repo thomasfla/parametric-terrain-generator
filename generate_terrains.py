@@ -11,7 +11,7 @@ from datetime import datetime
 
 params = {}
 params["terrainSize"] = 8.0
-params["borderSize"] = 10.0
+params["borderSize"] = 2.5
 params["numLevels"] = 4
 params["numTerrains"] = 5
 params["resolution"] = 100
@@ -70,6 +70,15 @@ for i in tqdm(range(params["numTerrains"])):
         meshes.append(mesh)
         if j == 0:
             params["info"].append(info)
+
+# Add border
+meshes.append(
+    tgen.create_border(
+        params["terrainSize"] * params["numLevels"],
+        params["terrainSize"] * params["numTerrains"],
+        params["borderSize"],
+    )
+)
 
 world_mesh = trimesh.util.concatenate(meshes)
 
