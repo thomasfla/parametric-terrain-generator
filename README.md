@@ -31,3 +31,7 @@ The terrains are constrained to be at altitude 0 near the edges, and have a cent
   <img src="images/terrain5_3d.png" width=49% />
   <img src="images/terrain5_heightmap.png" width=49% />
 </p>
+<p float="middle">
+  <img src="images/terrain6_3d.png" width=49% />
+  <img src="images/terrain6_heightmap.png" width=49% />
+</p>
