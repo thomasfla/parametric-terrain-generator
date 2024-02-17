@@ -170,6 +170,52 @@ def create_square_block(center, width=0.3, height=0.0, block_height=0.08, yaw=0)
     return create_block(center, width, width, height, block_height, yaw)
 
 
+def create_block_tilted_top(
+    center, length=1.0, width=0.3, height=0.0, block_height=0.08, yaw=0, noise=0.02
+):
+    """
+    Generate a block mesh centered at a given point with a given orientation.
+
+    Parameters:
+    - center (tuple/list of float): Center point (x, y) of the block.
+    - length (float): Size of the block along the first axis.
+    - width (float): Size of the block along the second axis.
+    - height (float): Base height of the block.
+    - block_height (float): Additional height for the top vertices of the block.
+    - yaw (float): Orientation in yaw.
+    - noise (float): Noise to disturb the top surface with.
+
+    Returns:
+    - trimesh.Trimesh: Mesh object representing the block.
+    """
+
+    mesh_top = create_plane(center, length, width, height + block_height)
+    mesh_side = create_wall(center, length, width, height, block_height)
+    mesh = trimesh.util.concatenate([mesh_top, mesh_side])
+
+    # Moving up and down the vertices of the top of the block to create the tilting
+    A = mesh.vertices[:, 2] == height + block_height  # Selecting the top vertices
+    B = mesh.vertices[:, 0] == (
+        center[0] + length / 2
+    )  # Selecting the vertices on positive X
+    C = mesh.vertices[:, 1] == (
+        center[1] + width / 2
+    )  # Selecting the vertices on positive Y
+    nXY = (2 * np.random.random(2) - 1) * noise  # Tilting magnitude along X and Y
+    mesh.vertices[A * B, 2] += nXY[0]
+    mesh.vertices[A * ~B, 2] -= nXY[0]
+    mesh.vertices[A * C, 2] += nXY[1]
+    mesh.vertices[A * ~C, 2] -= nXY[1]
+
+    if yaw != 0:
+        rot_matrix = trimesh.transformations.rotation_matrix(
+            yaw, [0, 0, 1], [center[0], center[1], 0]
+        )
+        mesh.apply_transform(rot_matrix)
+
+    return mesh
+
+
 def create_square_plane_with_hole(center, outer_size, inner_size, height):
     """
     Generate a square plane with a square hole.

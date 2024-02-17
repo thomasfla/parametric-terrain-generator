@@ -3,6 +3,7 @@ from generators.terrain_stairs import generate_pyramid_stairs_terrain
 from generators.terrain_blocks import generate_block_terrain
 from generators.terrain_slope import generate_slope_terrain
 from generators.terrain_checkers import generate_checkers_terrain
+from generators.terrain_tilted_squares import generate_tilted_squares_terrain
 import numpy as np
 import trimesh
 
@@ -238,6 +239,37 @@ def checkers(difficulty):
         info["block_height"] * difficulty,
         info["platform_size"],
         info["noise"],
+    )
+
+    return mesh, info
+
+
+def tilted_squares(difficulty):
+    """
+    Generates a 3D terrain mesh with a filed a square blocks with tilted top.
+
+    Parameters:
+    - difficulty (float): Difficulty scaling between 0 (easiest) and 1 (hardest).
+
+    Returns:
+    - A trimesh.Trimesh object representing the generated terrain mesh.
+    - A dict containing the parameters of the terrain generator.
+    """
+
+    info = {}
+    info["name"] = "tilted_squares"
+    info["terrain_size"] = 8.0
+    info["block_size"] = 0.5
+    info["block_height"] = 0.08
+    info["platform_size"] = 1.0
+    info["noise"] = 0.04
+
+    mesh = generate_tilted_squares_terrain(
+        info["terrain_size"],
+        info["block_size"],
+        info["block_height"] * difficulty,
+        info["platform_size"],
+        info["noise"] * difficulty,
     )
 
     return mesh, info
