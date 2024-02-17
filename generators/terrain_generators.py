@@ -2,6 +2,7 @@ from generators.terrain_perlin import generate_perlin_terrain
 from generators.terrain_stairs import generate_pyramid_stairs_terrain
 from generators.terrain_blocks import generate_block_terrain
 from generators.terrain_slope import generate_slope_terrain
+from generators.terrain_checkers import generate_checkers_terrain
 import numpy as np
 import trimesh
 
@@ -206,6 +207,37 @@ def perlin(difficulty):
         info["platform_size"],
         info["platform_smoothing_distance"],
         info["edge_smoothing_distance"],
+    )
+
+    return mesh, info
+
+
+def checkers(difficulty):
+    """
+    Generates a 3D terrain mesh with a checkers pattern of blocks.
+
+    Parameters:
+    - difficulty (float): Difficulty scaling between 0 (easiest) and 1 (hardest).
+
+    Returns:
+    - A trimesh.Trimesh object representing the generated terrain mesh.
+    - A dict containing the parameters of the terrain generator.
+    """
+
+    info = {}
+    info["name"] = "checkers"
+    info["terrain_size"] = 8.0
+    info["block_size"] = 0.5
+    info["block_height"] = 0.09
+    info["platform_size"] = 0.75
+    info["noise"] = 0.02
+
+    mesh = generate_checkers_terrain(
+        info["terrain_size"],
+        info["block_size"],
+        info["block_height"] * difficulty,
+        info["platform_size"],
+        info["noise"],
     )
 
     return mesh, info

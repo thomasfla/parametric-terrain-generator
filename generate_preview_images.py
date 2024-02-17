@@ -6,6 +6,7 @@ from generators.terrain_perlin import generate_perlin_terrain
 from generators.terrain_stairs import generate_pyramid_stairs_terrain
 from generators.terrain_blocks import generate_block_terrain
 from generators.terrain_slope import generate_slope_terrain
+from generators.terrain_checkers import generate_checkers_terrain
 
 print("-- Generating meshes --")
 meshs = []
@@ -14,6 +15,7 @@ meshs.append(generate_pyramid_stairs_terrain(going_up=False))
 meshs.append(generate_pyramid_stairs_terrain(going_up=True))
 meshs.append(generate_block_terrain())
 meshs.append(generate_slope_terrain())
+meshs.append(generate_checkers_terrain())
 
 print("-- Generating images and heightmaps --")
 for i, mesh in enumerate(tqdm(meshs)):

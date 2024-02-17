@@ -168,3 +168,45 @@ def create_square_block(center, width=0.3, height=0.0, block_height=0.08, yaw=0)
     - trimesh.Trimesh: Mesh object representing the block.
     """
     return create_block(center, width, width, height, block_height, yaw)
+
+
+def create_square_plane_with_hole(center, outer_size, inner_size, height):
+    """
+    Generate a square plane with a square hole.
+
+    Parameters:
+    - center (tuple/list of float): Center of the square.
+    - outer_size (float): Size of the outer square.
+    - inner_size (float): Size of the inner square (hole).
+    - height (float): Z-coordinate (height) of the plane.
+
+    Returns:
+    - trimesh.Trimesh: Mesh object representing the step top.
+    """
+    half_outer = outer_size / 2
+    half_inner = inner_size / 2
+    vertices = np.array(
+        [
+            [center[0] - half_outer, center[1] - half_outer, height],
+            [center[0] + half_outer, center[1] - half_outer, height],
+            [center[0] + half_outer, center[1] + half_outer, height],
+            [center[0] - half_outer, center[1] + half_outer, height],
+            [center[0] - half_inner, center[1] - half_inner, height],
+            [center[0] + half_inner, center[1] - half_inner, height],
+            [center[0] + half_inner, center[1] + half_inner, height],
+            [center[0] - half_inner, center[1] + half_inner, height],
+        ]
+    )
+    faces = np.array(
+        [
+            [0, 1, 5],
+            [0, 5, 4],
+            [1, 2, 6],
+            [1, 6, 5],
+            [2, 3, 7],
+            [2, 7, 6],
+            [3, 0, 4],
+            [3, 4, 7],
+        ]
+    )
+    return trimesh.Trimesh(vertices=vertices, faces=faces)

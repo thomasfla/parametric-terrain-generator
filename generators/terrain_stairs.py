@@ -1,48 +1,10 @@
 import numpy as np
 import trimesh
-from .utils import create_square_plane, create_square_wall
-
-
-def create_step_top(center, outer_size, inner_size, height):
-    """
-    Generate a step top mesh, a square plane with a square hole.
-
-    Parameters:
-    - center (tuple/list of float): Center of the square.
-    - outer_size (float): Size of the outer square.
-    - inner_size (float): Size of the inner square (hole).
-    - height (float): Z-coordinate (height) of the plane.
-
-    Returns:
-    - trimesh.Trimesh: Mesh object representing the step top.
-    """
-    half_outer = outer_size / 2
-    half_inner = inner_size / 2
-    vertices = np.array(
-        [
-            [center[0] - half_outer, center[1] - half_outer, height],
-            [center[0] + half_outer, center[1] - half_outer, height],
-            [center[0] + half_outer, center[1] + half_outer, height],
-            [center[0] - half_outer, center[1] + half_outer, height],
-            [center[0] - half_inner, center[1] - half_inner, height],
-            [center[0] + half_inner, center[1] - half_inner, height],
-            [center[0] + half_inner, center[1] + half_inner, height],
-            [center[0] - half_inner, center[1] + half_inner, height],
-        ]
-    )
-    faces = np.array(
-        [
-            [0, 1, 5],
-            [0, 5, 4],
-            [1, 2, 6],
-            [1, 6, 5],
-            [2, 3, 7],
-            [2, 7, 6],
-            [3, 0, 4],
-            [3, 4, 7],
-        ]
-    )
-    return trimesh.Trimesh(vertices=vertices, faces=faces)
+from .utils import (
+    create_square_plane,
+    create_square_wall,
+    create_square_plane_with_hole,
+)
 
 
 def generate_pyramid_stairs_terrain(
@@ -75,7 +37,9 @@ def generate_pyramid_stairs_terrain(
         outer_size = terrain_size if i == num_steps - 1 else outer_size
         inner_size = platform_size + 2 * step_width * i
         height = sign * (step_height * (i + 1) - total_height)
-        step_mesh = create_step_top(center, outer_size, inner_size, height)
+        step_mesh = create_square_plane_with_hole(
+            center, outer_size, inner_size, height
+        )
         wall_mesh = create_square_wall(center, inner_size, height, -sign * step_height)
         meshes.append(step_mesh)
         meshes.append(wall_mesh)
