@@ -1,73 +1,6 @@
 import numpy as np
 import trimesh
-
-
-def create_square_plane(center, width, z_height):
-    """
-    Generate a square plane mesh centered at a given point.
-
-    Parameters:
-    - center (tuple/list of float): Center point (x, y) of the square plane.
-    - width (float): Width of the square plane.
-    - z_height (float): Z-coordinate (height) of the plane.
-
-    Returns:
-    - trimesh.Trimesh: Mesh object representing the square plane.
-    """
-    half_width = width / 2
-    corners = np.array(
-        [
-            [center[0] - half_width, center[1] - half_width, z_height],
-            [center[0] + half_width, center[1] - half_width, z_height],
-            [center[0] + half_width, center[1] + half_width, z_height],
-            [center[0] - half_width, center[1] + half_width, z_height],
-        ]
-    )
-    faces = np.array([[0, 1, 2], [0, 2, 3]])
-    return trimesh.Trimesh(vertices=corners, faces=faces)
-
-
-def create_wall(center, size, height, step_height):
-    """
-    Generate a squared wall mesh with a specified base center, size, and height.
-
-    Parameters:
-    - center (tuple/list of float): Center of the base of the wall.
-    - size (float): Length and width of the wall base.
-    - height (float): Base height of the wall.
-    - step_height (float): Additional height for the top vertices of the wall.
-
-    Returns:
-    - trimesh.Trimesh: Mesh object representing the wall.
-    """
-    half_size = size / 2
-    base_z = height
-    top_z = height + step_height
-    vertices = np.array(
-        [
-            [center[0] - half_size, center[1] - half_size, base_z],
-            [center[0] + half_size, center[1] - half_size, base_z],
-            [center[0] + half_size, center[1] + half_size, base_z],
-            [center[0] - half_size, center[1] + half_size, base_z],
-            [center[0] - half_size, center[1] - half_size, top_z],
-            [center[0] + half_size, center[1] - half_size, top_z],
-            [center[0] + half_size, center[1] + half_size, top_z],
-            [center[0] - half_size, center[1] + half_size, top_z],
-        ]
-    )
-    faces = np.array(
-        [
-            [0, 1, 5],
-            [0, 5, 4],
-            [1, 2, 6],
-            [1, 6, 5],
-            [2, 3, 7],
-            [2, 7, 6],
-            [3, 0, 4],
-            [3, 4, 7],
-        ]
-    )
-    return trimesh.Trimesh(vertices=vertices, faces=faces)
+from .utils import create_square_plane, create_square_wall
 
 
 def create_step_top(center, outer_size, inner_size, height):
@@ -143,7 +76,7 @@ def generate_pyramid_stairs_terrain(
         inner_size = platform_size + 2 * step_width * i
         height = sign * (step_height * (i + 1) - total_height)
         step_mesh = create_step_top(center, outer_size, inner_size, height)
-        wall_mesh = create_wall(center, inner_size, height, -sign * step_height)
+        wall_mesh = create_square_wall(center, inner_size, height, -sign * step_height)
         meshes.append(step_mesh)
         meshes.append(wall_mesh)
 

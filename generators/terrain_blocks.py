@@ -1,84 +1,6 @@
 import numpy as np
 import trimesh
-
-
-def create_square_plane(center, width, z_height):
-    """
-    Generate a square plane mesh centered at a given point.
-
-    Parameters:
-    - center (tuple/list of float): Center point (x, y) of the square plane.
-    - width (float): Width of the square plane.
-    - z_height (float): Z-coordinate (height) of the plane.
-
-    Returns:
-    - trimesh.Trimesh: Mesh object representing the square plane.
-    """
-    half_width = width / 2
-    corners = np.array(
-        [
-            [center[0] - half_width, center[1] - half_width, z_height],
-            [center[0] + half_width, center[1] - half_width, z_height],
-            [center[0] + half_width, center[1] + half_width, z_height],
-            [center[0] - half_width, center[1] + half_width, z_height],
-        ]
-    )
-    faces = np.array([[0, 1, 2], [0, 2, 3]])
-    return trimesh.Trimesh(vertices=corners, faces=faces)
-
-
-def create_block(center, yaw, length=1.0, width=0.3, block_height=0.08):
-    """
-    Generate a block mesh centered at a given point with a given orientation.
-
-    Parameters:
-    - center (tuple/list of float): Center point (x, y) of the block.
-    - yaw (float): Orientation in yaw.
-    - length (float): Size of the block along the first axis.
-    - width (float): Size of the block along the second axis.
-    - block_height (float): Height of the block.
-
-    Returns:
-    - trimesh.Trimesh: Mesh object representing the block.
-    """
-    half_length = length / 2
-    half_width = width / 2
-    corners = np.array(
-        [
-            [-half_length, -half_width, block_height],
-            [+half_length, -half_width, block_height],
-            [+half_length, +half_width, block_height],
-            [-half_length, +half_width, block_height],
-            [-half_length, -half_width, 0.0],
-            [+half_length, -half_width, 0.0],
-            [+half_length, +half_width, 0.0],
-            [-half_length, +half_width, 0.0],
-        ]
-    )
-    faces = np.array(
-        [
-            [0, 1, 2],
-            [0, 2, 3],
-            [0, 4, 1],
-            [4, 5, 1],
-            [1, 5, 2],
-            [5, 6, 2],
-            [2, 6, 3],
-            [6, 7, 3],
-            [3, 7, 0],
-            [7, 4, 0],
-        ]
-    )
-    mesh = trimesh.Trimesh(vertices=corners, faces=faces)
-
-    # Place the mesh in the world
-    rot_matrix = trimesh.transformations.rotation_matrix(yaw, [0, 0, 1], [0.0, 0.0, 0])
-    mesh.apply_transform(rot_matrix)
-    shift_matrix = np.eye(4)
-    shift_matrix[:2, -1] = center[0], center[1]
-    mesh.apply_transform(shift_matrix)
-
-    return mesh
+from .utils import create_block, create_square_block, create_square_plane
 
 
 def create_block_pattern(center, yaw, pattern):
@@ -108,9 +30,9 @@ def create_block_pattern(center, yaw, pattern):
         meshes.append(
             create_block(
                 [0.0, y_start + width * i, 0.0],
-                0.0,
                 length,
                 width,
+                0.0,
                 block_height * int(pattern[i]),
             )
         )
@@ -173,17 +95,16 @@ def generate_block_terrain(
         width = np.random.random() * (max_block_size - min_block_size) + min_block_size
         block_height = np.random.random() * max_block_height
 
-        meshes.append(create_block(xy, yaw, length, width, block_height))
+        meshes.append(create_block(xy, length, width, 0.0, block_height, yaw))
         k += 1
 
     # Central platform
     if central_platform:
         meshes.append(
-            create_block(
+            create_square_block(
                 [terrain_size / 2, terrain_size / 2],
+                platform_size,
                 0.0,
-                platform_size,
-                platform_size,
                 0.5 * max_block_height,
             )
         )

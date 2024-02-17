@@ -1,30 +1,6 @@
 import numpy as np
 import trimesh
-
-
-def create_square_plane(center, width, z_height):
-    """
-    Generate a square plane mesh centered at a given point.
-
-    Parameters:
-    - center (tuple/list of float): Center point (x, y) of the square plane.
-    - width (float): Width of the square plane.
-    - z_height (float): Z-coordinate (height) of the plane.
-
-    Returns:
-    - trimesh.Trimesh: Mesh object representing the square plane.
-    """
-    half_width = width / 2
-    corners = np.array(
-        [
-            [center[0] - half_width, center[1] - half_width, z_height],
-            [center[0] + half_width, center[1] - half_width, z_height],
-            [center[0] + half_width, center[1] + half_width, z_height],
-            [center[0] - half_width, center[1] + half_width, z_height],
-        ]
-    )
-    faces = np.array([[0, 1, 2], [0, 2, 3]])
-    return trimesh.Trimesh(vertices=corners, faces=faces)
+from .utils import create_square_plane
 
 
 def create_step_top(center, outer_size, inner_size, height):
