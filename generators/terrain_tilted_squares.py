@@ -31,6 +31,9 @@ def generate_tilted_squares_terrain(
     N = int(terrain_size / block_size)
     center = [terrain_size / 2, terrain_size / 2]
 
+    if block_height == 0.0:
+        return create_square_plane(center, terrain_size, 0.0)
+
     # Flat border area around the checkers
     border_mesh = create_square_plane_with_hole(
         center, terrain_size, terrain_size - 2 * block_size, 0.0
