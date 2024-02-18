@@ -8,6 +8,7 @@ from generators.terrain_blocks import generate_block_terrain
 from generators.terrain_slope import generate_slope_terrain
 from generators.terrain_checkers import generate_checkers_terrain
 from generators.terrain_tilted_squares import generate_tilted_squares_terrain
+from generators.terrain_square_centric import generate_square_centric_terrain
 
 print("-- Generating meshes --")
 meshs = []
@@ -18,6 +19,7 @@ meshs.append(generate_block_terrain())
 meshs.append(generate_slope_terrain())
 meshs.append(generate_checkers_terrain())
 meshs.append(generate_tilted_squares_terrain())
+meshs.append(generate_square_centric_terrain())
 
 print("-- Generating images and heightmaps --")
 for i, mesh in enumerate(tqdm(meshs)):

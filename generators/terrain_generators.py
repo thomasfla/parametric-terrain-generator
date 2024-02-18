@@ -4,6 +4,7 @@ from generators.terrain_blocks import generate_block_terrain
 from generators.terrain_slope import generate_slope_terrain
 from generators.terrain_checkers import generate_checkers_terrain
 from generators.terrain_tilted_squares import generate_tilted_squares_terrain
+from generators.terrain_square_centric import generate_square_centric_terrain
 import numpy as np
 import trimesh
 
@@ -270,6 +271,37 @@ def tilted_squares(difficulty):
         info["block_height"] * difficulty,
         info["platform_size"],
         info["noise"] * difficulty,
+    )
+
+    return mesh, info
+
+
+def square_centric(difficulty):
+    """
+    Generates a 3D terrain mesh with centric square obstacles.
+
+    Parameters:
+    - difficulty (float): Difficulty scaling between 0 (easiest) and 1 (hardest).
+
+    Returns:
+    - A trimesh.Trimesh object representing the generated terrain mesh.
+    - A dict containing the parameters of the terrain generator.
+    """
+
+    info = {}
+    info["name"] = "square_centric"
+    info["terrain_size"] = 8.0
+    info["step_width"] = 0.6
+    info["step_height"] = 0.08
+    info["step_spacing"] = 0.7
+    info["platform_size"] = 1.0
+
+    mesh = generate_square_centric_terrain(
+        info["terrain_size"],
+        info["step_width"],
+        info["step_height"] * difficulty,
+        info["step_spacing"],
+        info["platform_size"],
     )
 
     return mesh, info
