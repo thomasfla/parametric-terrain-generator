@@ -1,3 +1,12 @@
+# This script is used to generate a complex terrain made of several subterrains stacked
+# together. Subterrains are divided into rows and columns, with a flat border area
+# around the whole. Each column will be dedicated to a single type of terrain, with
+# increasing difficulty for each row. The first row is flat ground while the last is the
+# hardest subterrain setting. The whole terrain is rendered in terrains_DATE.png.
+# The heightmap of the whole terrain is rendered in terrains_DATE_heightmap.png. The
+# final mesh, heightmap and parameters are saved in terrain_DATE.npz for later loading
+# into a simulator.
+
 import generators.terrain_generators as tgen
 from terrain_heightmap import generate_heightmap, plot_heightmap
 import trimesh
@@ -10,11 +19,11 @@ from datetime import datetime
 ######
 
 params = {}
-params["terrainSize"] = 8.0
-params["borderSize"] = 2.5
-params["numLevels"] = 4
-params["numTerrains"] = 8
-params["resolution"] = 1
+params["terrainSize"] = 8.0  # Size of subeterrains [m]
+params["borderSize"] = 2.5  # Size of the border area [m]
+params["numLevels"] = 4  # Num of rows
+params["numTerrains"] = 8  # Num of columns
+params["resolution"] = 1  # Heightmap points per meter
 
 terrainProportions = {}
 terrainProportions["stairs_upwards"] = 1.0
@@ -138,7 +147,7 @@ plot_heightmap(
 )
 
 ######
-# Heightmap generation
+# Saving results (mesh, heightmap, parameters)
 ######
 
 print("--Saving mesh, heightmap and parameters --")

@@ -1,3 +1,7 @@
+# This script is used to generate individual 3D rendering and heightmap visualisations
+# for a series of terrains. 3D rendering are saved in images/terrainX_3d.png and
+# heightmap rendering are saved in images/terrainX_heightmap.png
+
 from terrain_heightmap import generate_heightmap, plot_heightmap
 import trimesh
 import numpy as np
