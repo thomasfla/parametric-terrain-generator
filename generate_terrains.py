@@ -101,7 +101,7 @@ world_mesh.visual.vertex_colors = trimesh.visual.interpolate(
 scene = trimesh.Scene(world_mesh)
 # scene.show()
 
-data = scene.save_image(resolution=[1920, 1080], visible=False)
+data = scene.save_image(resolution=[576, 1080], visible=False)
 time_str = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 fn = "images/terrains_" + time_str + ".png"
 with open(fn, "wb") as f:
