@@ -13,8 +13,8 @@ params = {}
 params["terrainSize"] = 8.0
 params["borderSize"] = 2.5
 params["numLevels"] = 4
-params["numTerrains"] = 5
-params["resolution"] = 100
+params["numTerrains"] = 8
+params["resolution"] = 1
 
 terrainProportions = {}
 terrainProportions["stairs_upwards"] = 1.0
@@ -22,6 +22,9 @@ terrainProportions["stairs_downwards"] = 1.0
 terrainProportions["slope_upwards"] = 1.0
 terrainProportions["random_blocks"] = 1.0
 terrainProportions["perlin"] = 1.0
+terrainProportions["checkers"] = 1.0
+terrainProportions["tilted_squares"] = 1.0
+terrainProportions["square_centric"] = 1.0
 params["terrainProportions"] = terrainProportions
 
 params["info"] = []
@@ -120,15 +123,15 @@ hm = generate_heightmap(
 
 fn = "images/terrains_" + time_str + "_heightmap.png"
 plot_heightmap(
-    hm,
+    hm.transpose(),
     xy_range=(
         (
             -params["borderSize"],
-            params["terrainSize"] * params["numLevels"] + params["borderSize"],
+            params["terrainSize"] * params["numTerrains"] + params["borderSize"],
         ),
         (
             -params["borderSize"],
-            params["terrainSize"] * params["numTerrains"] + params["borderSize"],
+            params["terrainSize"] * params["numLevels"] + params["borderSize"],
         ),
     ),
     filename=fn,
