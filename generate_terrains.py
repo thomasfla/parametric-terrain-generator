@@ -22,10 +22,11 @@ params = {}
 params["terrainSize"] = 8.0  # Size of subeterrains [m]
 params["borderSize"] = 2.5  # Size of the border area [m]
 params["numLevels"] = 4  # Num of rows
-params["numTerrains"] = 8  # Num of columns
+params["numTerrains"] = 9  # Num of columns
 params["resolution"] = 1  # Heightmap points per meter
 
 terrainProportions = {}
+terrainProportions["flat"] = 1.0
 terrainProportions["stairs_upwards"] = 1.0
 terrainProportions["stairs_downwards"] = 1.0
 terrainProportions["slope_upwards"] = 1.0

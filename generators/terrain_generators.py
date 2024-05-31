@@ -1,3 +1,4 @@
+from generators.terrain_flat import generate_flat_terrain
 from generators.terrain_perlin import generate_perlin_terrain
 from generators.terrain_stairs import generate_pyramid_stairs_terrain
 from generators.terrain_blocks import generate_block_terrain
@@ -49,6 +50,29 @@ def create_border(sizeX, sizeY, borderSize):
         ]
     )
     return trimesh.Trimesh(vertices=vertices, faces=faces)
+
+
+def flat(difficulty):
+    """
+    Generates a 3D terrain mesh that is completely flat.
+
+    Parameters:
+    - difficulty (float): Difficulty scaling between 0 (easiest) and 1 (hardest).
+
+    Returns:
+    - A trimesh.Trimesh object representing the generated terrain mesh.
+    - A dict containing the parameters of the terrain generator.
+    """
+
+    info = {}
+    info["name"] = "flat"
+    info["terrain_size"] = 8.0
+
+    mesh = generate_flat_terrain(
+        info["terrain_size"],
+    )
+
+    return mesh, info
 
 
 def stairs_upwards(difficulty):
