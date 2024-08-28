@@ -71,7 +71,7 @@ for i in tqdm(range(params["numTerrains"])):
 
     for j in range(params["numLevels"]):
         # Generate the mesh for given difficulty
-        mesh, info = tgens[k](difficulties[j])
+        mesh, info = tgens[k](difficulties[j], params["terrainSize"])
 
         # Place the mesh in the world
         center = [j * params["terrainSize"], i * params["terrainSize"]]

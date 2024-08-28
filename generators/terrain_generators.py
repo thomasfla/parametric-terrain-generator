@@ -52,7 +52,7 @@ def create_border(sizeX, sizeY, borderSize):
     return trimesh.Trimesh(vertices=vertices, faces=faces)
 
 
-def flat(difficulty):
+def flat(difficulty, terrain_size=8.0):
     """
     Generates a 3D terrain mesh that is completely flat.
 
@@ -66,7 +66,7 @@ def flat(difficulty):
 
     info = {}
     info["name"] = "flat"
-    info["terrain_size"] = 8.0
+    info["terrain_size"] = terrain_size
 
     mesh = generate_flat_terrain(
         info["terrain_size"],
@@ -75,7 +75,7 @@ def flat(difficulty):
     return mesh, info
 
 
-def stairs_upwards(difficulty):
+def stairs_upwards(difficulty, terrain_size=8.0):
     """
     Generates a 3D terrain mesh with stairs going upwards.
 
@@ -89,7 +89,7 @@ def stairs_upwards(difficulty):
 
     info = {}
     info["name"] = "stairs_upwards"
-    info["terrain_size"] = 8.0
+    info["terrain_size"] = terrain_size
     info["step_width"] = 0.6
     info["step_height"] = 0.08
     info["platform_size"] = 1.0
@@ -106,7 +106,7 @@ def stairs_upwards(difficulty):
     return mesh, info
 
 
-def stairs_downwards(difficulty):
+def stairs_downwards(difficulty, terrain_size=8.0):
     """
     Generates a 3D terrain mesh with stairs going upwards.
 
@@ -120,7 +120,7 @@ def stairs_downwards(difficulty):
 
     info = {}
     info["name"] = "stairs_downwards"
-    info["terrain_size"] = 8.0
+    info["terrain_size"] = terrain_size
     info["step_width"] = 0.6
     info["step_height"] = 0.08
     info["platform_size"] = 1.0
@@ -137,7 +137,7 @@ def stairs_downwards(difficulty):
     return mesh, info
 
 
-def slope_upwards(difficulty):
+def slope_upwards(difficulty, terrain_size=8.0):
     """
     Generates a 3D terrain mesh with a slope going upwards.
 
@@ -151,7 +151,7 @@ def slope_upwards(difficulty):
 
     info = {}
     info["name"] = "slope_upwards"
-    info["terrain_size"] = 8.0
+    info["terrain_size"] = terrain_size
     info["total_height"] = 0.5
     info["bar_height"] = 0.08
     info["bar_width"] = 0.2
@@ -170,7 +170,7 @@ def slope_upwards(difficulty):
     return mesh, info
 
 
-def random_blocks(difficulty):
+def random_blocks(difficulty, terrain_size=8.0):
     """
     Generates a 3D terrain mesh using randomly placed blocks.
 
@@ -184,7 +184,7 @@ def random_blocks(difficulty):
 
     info = {}
     info["name"] = "random_blocks"
-    info["terrain_size"] = 8.0
+    info["terrain_size"] = terrain_size
     info["min_block_size"] = 0.5
     info["max_block_size"] = 1.0
     info["max_block_height"] = 0.1
@@ -203,7 +203,7 @@ def random_blocks(difficulty):
     return mesh, info
 
 
-def perlin(difficulty):
+def perlin(difficulty, terrain_size=8.0):
     """
     Generates a 3D terrain mesh using Perlin noise.
 
@@ -217,7 +217,7 @@ def perlin(difficulty):
 
     info = {}
     info["name"] = "perlin"
-    info["terrain_size"] = 8.0
+    info["terrain_size"] = terrain_size
     info["resolution_per_meter"] = 20
     info["scale"] = 0.2
     info["height_multiplier"] = 0.3
@@ -238,7 +238,7 @@ def perlin(difficulty):
     return mesh, info
 
 
-def checkers(difficulty):
+def checkers(difficulty, terrain_size=8.0):
     """
     Generates a 3D terrain mesh with a checkers pattern of blocks.
 
@@ -252,7 +252,7 @@ def checkers(difficulty):
 
     info = {}
     info["name"] = "checkers"
-    info["terrain_size"] = 8.0
+    info["terrain_size"] = terrain_size
     info["block_size"] = 0.5
     info["block_height"] = 0.09
     info["platform_size"] = 0.75
@@ -269,7 +269,7 @@ def checkers(difficulty):
     return mesh, info
 
 
-def tilted_squares(difficulty):
+def tilted_squares(difficulty, terrain_size=8.0):
     """
     Generates a 3D terrain mesh with a filed a square blocks with tilted top.
 
@@ -283,7 +283,7 @@ def tilted_squares(difficulty):
 
     info = {}
     info["name"] = "tilted_squares"
-    info["terrain_size"] = 8.0
+    info["terrain_size"] = terrain_size
     info["block_size"] = 0.5
     info["block_height"] = 0.08
     info["platform_size"] = 1.0
@@ -300,7 +300,7 @@ def tilted_squares(difficulty):
     return mesh, info
 
 
-def square_centric(difficulty):
+def square_centric(difficulty, terrain_size=8.0):
     """
     Generates a 3D terrain mesh with centric square obstacles.
 
@@ -314,7 +314,7 @@ def square_centric(difficulty):
 
     info = {}
     info["name"] = "square_centric"
-    info["terrain_size"] = 8.0
+    info["terrain_size"] = terrain_size
     info["step_width"] = 0.6
     info["step_height"] = 0.08
     info["step_spacing"] = 0.7
