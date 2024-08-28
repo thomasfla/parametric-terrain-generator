@@ -43,3 +43,17 @@ The terrains are constrained to be at altitude 0 near the edges, and have a cent
   <img src="images/terrain8_3d.png" width=49% />
   <img src="images/terrain8_heightmap.png" width=49% />
 </p>
+
+## Citing
+
+If you use this parametric terrain generator in your research please use the following citation:
+
+@misc{parametric2024,
+title = {Parametric Terrain Generator},
+author = {Leziart, Pierre-Alexandre and Flayols, Thomas},
+month = {August},
+year = {2024},
+publisher = {GitHub},
+journal = {GitHub repository},
+howpublished = {\url{https://github.com/thomasfla/parametric-terrain-generator.git}},
+}
