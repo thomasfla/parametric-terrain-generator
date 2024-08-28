@@ -1,0 +1,70 @@
+
+terrainSize: 8.0  # Size of subeterrains [m]
+borderSize: 2.5  # Size of the border area [m]
+numLevels: 4  # Num of rows
+numTerrains: 10  # Num of columns
+resolution: 1  # Heightmap points per meter
+
+# Proportions of the different kinds of terrains over the columns
+terrainProportions:
+  flat: 0.0 #.3
+  stairs_upwards: 0.0
+  stairs_downwards: 0.0
+  slope_upwards: 0.0
+  random_blocks: 0.3
+  perlin: 0.3
+  checkers: 0.4 #2
+  tilted_squares: 0.0
+  square_centric: 0.0
+
+stairs_upwards:
+  stepWidth: 0.6
+  stepHeight: 0.08
+  platformSize: 1.0
+  goingUp: True
+
+stairs_downwards:
+  stepWidth: 0.6
+  stepHeight: 0.08
+  platformSize: 1.0
+  goingUp: False
+
+slope_upwards:
+  totalHeight: 0.5
+  barHeight: 0.08
+  barWidth: 0.2
+  platformSize: 1.0
+  goingUp: True
+
+random_blocks:
+  minBlockSize: 0.5
+  maxBlockSize: 1.0
+  maxBlockHeight: 0.1
+  platformSize: 0.75
+  centralPlatform: True
+
+perlin:
+  resolutionPerMeter: 20
+  scale: 0.2
+  heightMultiplier: 0.3
+  platformSize: 0.75
+  platformSmoothingDistance: 0.4
+  edgeSmoothingDistance: 0.4
+
+checkers:
+  blockSize: 0.5
+  blockHeight: 0.1
+  platformSize: 0.75
+  noise: 0.01
+
+tilted_squares:
+  blockSize: 0.5
+  blockHeight: 0.08
+  platformSize: 1.0
+  noise: 0.04
+
+square_centric:
+  stepWidth: 0.6
+  stepHeight: 0.08
+  stepSpacing: 0.7
+  platformSize: 1.0

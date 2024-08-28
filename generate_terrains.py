@@ -13,31 +13,15 @@ import trimesh
 import numpy as np
 from tqdm import tqdm
 from datetime import datetime
+import yaml
 
 ######
 # Parameters of terrain generation
 ######
 
-params = {}
-params["terrainSize"] = 8.0  # Size of subeterrains [m]
-params["borderSize"] = 2.5  # Size of the border area [m]
-params["numLevels"] = 4  # Num of rows
-params["numTerrains"] = 9  # Num of columns
-params["resolution"] = 1  # Heightmap points per meter
-
-terrainProportions = {}
-terrainProportions["flat"] = 1.0
-terrainProportions["stairs_upwards"] = 1.0
-terrainProportions["stairs_downwards"] = 1.0
-terrainProportions["slope_upwards"] = 1.0
-terrainProportions["random_blocks"] = 1.0
-terrainProportions["perlin"] = 1.0
-terrainProportions["checkers"] = 1.0
-terrainProportions["tilted_squares"] = 1.0
-terrainProportions["square_centric"] = 1.0
-params["terrainProportions"] = terrainProportions
-
-params["info"] = []
+# Load the config file
+with open('config.yaml', 'rt') as f:
+    params = yaml.safe_load(f.read())
 
 ######
 # Prepare generators
@@ -46,10 +30,10 @@ params["info"] = []
 csum = 0
 tgens = []
 tgens_csum = []
-for name in terrainProportions.keys():
-    if terrainProportions[name] > 0:
+for name in params["terrainProportions"].keys():
+    if params["terrainProportions"][name] > 0:
         tgens.append(getattr(tgen, name))
-        csum += terrainProportions[name]
+        csum += params["terrainProportions"][name]
         tgens_csum.append(csum)
 
 if len(tgens) == 0:
@@ -71,7 +55,7 @@ for i in tqdm(range(params["numTerrains"])):
 
     for j in range(params["numLevels"]):
         # Generate the mesh for given difficulty
-        mesh, info = tgens[k](difficulties[j], params["terrainSize"])
+        mesh = tgens[k](difficulties[j], params)
 
         # Place the mesh in the world
         center = [j * params["terrainSize"], i * params["terrainSize"]]
@@ -79,10 +63,8 @@ for i in tqdm(range(params["numTerrains"])):
         shift_matrix[:2, -1] = center[0], center[1]
         mesh.apply_transform(shift_matrix)
 
-        # Save mesh and info
+        # Save mesh
         meshes.append(mesh)
-        if j == 0:
-            params["info"].append(info)
 
 # Add border
 meshes.append(

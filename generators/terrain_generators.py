@@ -8,7 +8,7 @@ from generators.terrain_tilted_squares import generate_tilted_squares_terrain
 from generators.terrain_square_centric import generate_square_centric_terrain
 import numpy as np
 import trimesh
-
+import inspect
 
 def create_border(sizeX, sizeY, borderSize):
     """
@@ -52,280 +52,216 @@ def create_border(sizeX, sizeY, borderSize):
     return trimesh.Trimesh(vertices=vertices, faces=faces)
 
 
-def flat(difficulty, terrain_size=8.0):
+def flat(difficulty, params):
     """
     Generates a 3D terrain mesh that is completely flat.
 
     Parameters:
     - difficulty (float): Difficulty scaling between 0 (easiest) and 1 (hardest).
+    - params (dict): Terrain parameters
 
     Returns:
     - A trimesh.Trimesh object representing the generated terrain mesh.
-    - A dict containing the parameters of the terrain generator.
     """
-
-    info = {}
-    info["name"] = "flat"
-    info["terrain_size"] = terrain_size
 
     mesh = generate_flat_terrain(
-        info["terrain_size"],
+        params["terrainSize"],
     )
 
-    return mesh, info
+    return mesh
 
 
-def stairs_upwards(difficulty, terrain_size=8.0):
+def stairs_upwards(difficulty, params):
     """
     Generates a 3D terrain mesh with stairs going upwards.
 
     Parameters:
     - difficulty (float): Difficulty scaling between 0 (easiest) and 1 (hardest).
+    - params (dict): Terrain parameters
 
     Returns:
     - A trimesh.Trimesh object representing the generated terrain mesh.
-    - A dict containing the parameters of the terrain generator.
     """
 
-    info = {}
-    info["name"] = "stairs_upwards"
-    info["terrain_size"] = terrain_size
-    info["step_width"] = 0.6
-    info["step_height"] = 0.08
-    info["platform_size"] = 1.0
-    info["going_up"] = True
-
+    name = inspect.stack()[0][3]
     mesh = generate_pyramid_stairs_terrain(
-        info["terrain_size"],
-        info["step_width"],
-        info["step_height"] * difficulty,
-        info["platform_size"],
-        info["going_up"],
+        params["terrainSize"],
+        params[name]["stepWidth"],
+        params[name]["stepHeight"] * difficulty,
+        params[name]["platformSize"],
+        params[name]["goingUp"],
     )
 
-    return mesh, info
+    return mesh
 
 
-def stairs_downwards(difficulty, terrain_size=8.0):
+def stairs_downwards(difficulty, params):
     """
     Generates a 3D terrain mesh with stairs going upwards.
 
     Parameters:
     - difficulty (float): Difficulty scaling between 0 (easiest) and 1 (hardest).
+    - params (dict): Terrain parameters
 
     Returns:
     - A trimesh.Trimesh object representing the generated terrain mesh.
-    - A dict containing the parameters of the terrain generator.
     """
 
-    info = {}
-    info["name"] = "stairs_downwards"
-    info["terrain_size"] = terrain_size
-    info["step_width"] = 0.6
-    info["step_height"] = 0.08
-    info["platform_size"] = 1.0
-    info["going_up"] = False
-
+    name = inspect.stack()[0][3]
     mesh = generate_pyramid_stairs_terrain(
-        info["terrain_size"],
-        info["step_width"],
-        info["step_height"] * difficulty,
-        info["platform_size"],
-        info["going_up"],
+        params["terrainSize"],
+        params[name]["stepWidth"],
+        params[name]["stepHeight"] * difficulty,
+        params[name]["platformSize"],
+        params[name]["goingUp"],
     )
 
-    return mesh, info
+    return mesh
 
 
-def slope_upwards(difficulty, terrain_size=8.0):
+def slope_upwards(difficulty, params):
     """
     Generates a 3D terrain mesh with a slope going upwards.
 
     Parameters:
     - difficulty (float): Difficulty scaling between 0 (easiest) and 1 (hardest).
+    - params (dict): Terrain parameters
 
     Returns:
     - A trimesh.Trimesh object representing the generated terrain mesh.
-    - A dict containing the parameters of the terrain generator.
     """
 
-    info = {}
-    info["name"] = "slope_upwards"
-    info["terrain_size"] = terrain_size
-    info["total_height"] = 0.5
-    info["bar_height"] = 0.08
-    info["bar_width"] = 0.2
-    info["platform_size"] = 1.0
-    info["going_up"] = True
-
+    name = inspect.stack()[0][3]
     mesh = generate_slope_terrain(
-        info["terrain_size"],
-        info["total_height"] * difficulty,
-        info["bar_height"] * difficulty,
-        info["bar_width"],
-        info["platform_size"],
-        info["going_up"],
+        params["terrainSize"],
+        params[name]["totalHeight"] * difficulty,
+        params[name]["barHeight"] * difficulty,
+        params[name]["barWidth"],
+        params[name]["platformSize"],
+        params[name]["goingUp"],
     )
 
-    return mesh, info
+    return mesh
 
 
-def random_blocks(difficulty, terrain_size=8.0):
+def random_blocks(difficulty, params):
     """
     Generates a 3D terrain mesh using randomly placed blocks.
 
     Parameters:
     - difficulty (float): Difficulty scaling between 0 (easiest) and 1 (hardest).
+    - params (dict): Terrain parameters
 
     Returns:
     - A trimesh.Trimesh object representing the generated terrain mesh.
-    - A dict containing the parameters of the terrain generator.
     """
 
-    info = {}
-    info["name"] = "random_blocks"
-    info["terrain_size"] = terrain_size
-    info["min_block_size"] = 0.5
-    info["max_block_size"] = 1.0
-    info["max_block_height"] = 0.1
-    info["platform_size"] = 0.75
-    info["central_platform"] = True
-
+    name = inspect.stack()[0][3]
     mesh = generate_block_terrain(
-        info["terrain_size"],
-        info["min_block_size"],
-        info["max_block_size"],
-        info["max_block_height"] * difficulty,
-        info["platform_size"],
-        info["central_platform"],
+        params["terrainSize"],
+        params[name]["minBlockSize"],
+        params[name]["maxBlockSize"],
+        params[name]["maxBlockHeight"] * difficulty,
+        params[name]["platformSize"],
+        params[name]["centralPlatform"],
     )
 
-    return mesh, info
+    return mesh
 
 
-def perlin(difficulty, terrain_size=8.0):
+def perlin(difficulty, params):
     """
     Generates a 3D terrain mesh using Perlin noise.
 
     Parameters:
     - difficulty (float): Difficulty scaling between 0 (easiest) and 1 (hardest).
+    - params (dict): Terrain parameters
 
     Returns:
     - A trimesh.Trimesh object representing the generated terrain mesh.
-    - A dict containing the parameters of the terrain generator.
     """
 
-    info = {}
-    info["name"] = "perlin"
-    info["terrain_size"] = terrain_size
-    info["resolution_per_meter"] = 20
-    info["scale"] = 0.2
-    info["height_multiplier"] = 0.3
-    info["platform_size"] = 0.75
-    info["platform_smoothing_distance"] = 0.4
-    info["edge_smoothing_distance"] = 0.4
-
+    name = inspect.stack()[0][3]
     mesh = generate_perlin_terrain(
-        info["terrain_size"],
-        info["resolution_per_meter"],
-        info["scale"],
-        info["height_multiplier"] * difficulty,
-        info["platform_size"],
-        info["platform_smoothing_distance"],
-        info["edge_smoothing_distance"],
+        params["terrainSize"],
+        params[name]["resolutionPerMeter"],
+        params[name]["scale"],
+        params[name]["heightMultiplier"] * difficulty,
+        params[name]["platformSize"],
+        params[name]["platformSmoothingDistance"],
+        params[name]["edgeSmoothingDistance"],
     )
 
-    return mesh, info
+    return mesh
 
 
-def checkers(difficulty, terrain_size=8.0):
+def checkers(difficulty, params):
     """
     Generates a 3D terrain mesh with a checkers pattern of blocks.
 
     Parameters:
     - difficulty (float): Difficulty scaling between 0 (easiest) and 1 (hardest).
+    - params (dict): Terrain parameters
 
     Returns:
     - A trimesh.Trimesh object representing the generated terrain mesh.
-    - A dict containing the parameters of the terrain generator.
     """
 
-    info = {}
-    info["name"] = "checkers"
-    info["terrain_size"] = terrain_size
-    info["block_size"] = 0.5
-    info["block_height"] = 0.09
-    info["platform_size"] = 0.75
-    info["noise"] = 0.02
-
+    name = inspect.stack()[0][3]
     mesh = generate_checkers_terrain(
-        info["terrain_size"],
-        info["block_size"],
-        info["block_height"] * difficulty,
-        info["platform_size"],
-        info["noise"],
+        params["terrainSize"],
+        params[name]["blockSize"],
+        params[name]["blockHeight"] * difficulty,
+        params[name]["platformSize"],
+        params[name]["noise"],
     )
 
-    return mesh, info
+    return mesh
 
 
-def tilted_squares(difficulty, terrain_size=8.0):
+def tilted_squares(difficulty, params):
     """
     Generates a 3D terrain mesh with a filed a square blocks with tilted top.
 
     Parameters:
     - difficulty (float): Difficulty scaling between 0 (easiest) and 1 (hardest).
+    - params (dict): Terrain parameters
 
     Returns:
     - A trimesh.Trimesh object representing the generated terrain mesh.
-    - A dict containing the parameters of the terrain generator.
     """
 
-    info = {}
-    info["name"] = "tilted_squares"
-    info["terrain_size"] = terrain_size
-    info["block_size"] = 0.5
-    info["block_height"] = 0.08
-    info["platform_size"] = 1.0
-    info["noise"] = 0.04
-
+    name = inspect.stack()[0][3]
     mesh = generate_tilted_squares_terrain(
-        info["terrain_size"],
-        info["block_size"],
-        info["block_height"] * difficulty,
-        info["platform_size"],
-        info["noise"] * difficulty,
+        params["terrainSize"],
+        params[name]["blockSize"],
+        params[name]["blockHeight"] * difficulty,
+        params[name]["platformSize"],
+        params[name]["noise"] * difficulty,
     )
 
-    return mesh, info
+    return mesh
 
 
-def square_centric(difficulty, terrain_size=8.0):
+def square_centric(difficulty, params):
     """
     Generates a 3D terrain mesh with centric square obstacles.
 
     Parameters:
     - difficulty (float): Difficulty scaling between 0 (easiest) and 1 (hardest).
+    - params (dict): Terrain parameters
 
     Returns:
     - A trimesh.Trimesh object representing the generated terrain mesh.
-    - A dict containing the parameters of the terrain generator.
     """
 
-    info = {}
-    info["name"] = "square_centric"
-    info["terrain_size"] = terrain_size
-    info["step_width"] = 0.6
-    info["step_height"] = 0.08
-    info["step_spacing"] = 0.7
-    info["platform_size"] = 1.0
-
+    name = inspect.stack()[0][3]
     mesh = generate_square_centric_terrain(
-        info["terrain_size"],
-        info["step_width"],
-        info["step_height"] * difficulty,
-        info["step_spacing"],
-        info["platform_size"],
+        params["terrainSize"],
+        params[name]["stepWidth"],
+        params[name]["stepHeight"] * difficulty,
+        params[name]["stepSpacing"],
+        params[name]["platformSize"],
     )
 
-    return mesh, info
+    return mesh
